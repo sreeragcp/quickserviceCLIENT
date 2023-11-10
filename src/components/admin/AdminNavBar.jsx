@@ -93,12 +93,6 @@ const AdminNavBar = () => {
                 href="#"
                 className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "
               >
-                Verification
-              </a>
-              <a
-                href="#"
-                className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "
-              >
                 <NavLink to="/admin/vehicle">Vehicle</NavLink>
               </a>
               <a
@@ -107,10 +101,16 @@ const AdminNavBar = () => {
                 <NavLink to="/admin/location">Location</NavLink>
               </a>
               <a
+                className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "
+              >
+                <NavLink to="/admin/coupon">Coupon</NavLink>
+              </a>
+              <a
                 href="#"
                 className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "
               >
-                Payment
+                <NavLink to="/admin/booking">Booking</NavLink> 
+             
               </a>
             </div>
 

@@ -1,74 +1,66 @@
-import React, { useEffect, useState } from "react";
-import AdminNavBar from "../../components/admin/AdminNavBar";
-import toast, { Toaster } from "react-hot-toast";
-import axios from "axios";
+import React,{useEffect, useState} from 'react'
+import AdminNavBar from '../../components/admin/AdminNavBar'
+import { functionAddCoupon } from '../../services/Apis';
+import { functionFecthCoupon } from '../../services/Apis';
 
-const AdminVehicle = () => {
-  const [currentVehicle, setCurrentVehicle] = useState([]);
-  const [vehicleList, setVehicleList] = useState([]);
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [vehicle, setVehicle] = useState("");
-  const [image, setImagefile] = useState("");
-  const [minWeight, setMinWeight] = useState("");
-  const [maxWeight, setMaxWeight] = useState("");
-  const [pricePerKm, setPricePerKm] = useState("")
+const AdminCoupon = () => {
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [currentCoupon, setCurrentCoupon] = useState([])
+    const [couponList,setCouponList] = useState([])
+    const [couponCode, setCouponCode] = useState('')
+    const [discount,setDiscount] = useState('')
+    const [maxDiscount, setMaxDiscount] = useState('')
+    const [expiryDate, setExpiryDate] = useState('')
 
 
-  const handleImage = (e, setImage) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
 
-      reader.onload = () => {
-        setImage(reader.result);
-      };
-      setImage(file);
-    }
-  };
-
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
-
+    
   const submitHandler = async (e) => {
     e.preventDefault();
     setModalVisible(!isModalVisible);
     try {
-      const data = { vehicle, image, minWeight, maxWeight,pricePerKm };
+      const data = { couponCode, discount, maxDiscount,expiryDate };
 
-      const res = await axios.post("http://localhost:4002/admin/vehicle", data);
-      setCurrentVehicle(res.data);
+      const res = await functionAddCoupon(data)
+
+      console.log(res.data,"this is the response");
+      setCurrentCoupon(res.data);
     } catch (error) {
       toast.error(error.message);
     }
   };
 
-  const fetchVehicleList = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:4002/admin/vehicleList"
-      );
-      console.log(response, "this is the response ");
-      if (response.data) {
-        setVehicleList(response.data);
-      } else {
-        toast.warning("No vehicle data found");
-      }
-    } catch (error) {
-      toast.error("Internal Server Error");
-    }
-  };
 
-  useEffect(() => {
-    fetchVehicleList();
-  }, [currentVehicle]);
 
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+      };
+
+
+      const fetchCouponList = async () => {
+        console.log("inside the couponList");
+        try {
+          const response = await functionFecthCoupon()
+
+          console.log(response, "this is the response ");
+          if (response.data) {
+            setCouponList(response.data);
+          } else {
+            toast.warning("No vehicle data found");
+          }
+        } catch (error) {
+          toast.error("Internal Server Error");
+        }
+      };
+
+      useEffect(()=>{
+        fetchCouponList()
+      },[])
   return (
     <>
-      <AdminNavBar />
+    <AdminNavBar/>
 
-      <section className="container max-w-4xl mt-16  px-4 mx-auto">
+    <section className="container max-w-4xl mt-16  px-4 mx-auto">
         <div className="flex items-center gap-x-3"></div>
         <div className="flex flex-col mt-6">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -79,7 +71,7 @@ const AdminVehicle = () => {
                   type="button"
                   className=" bg-transparent hover:bg-green-600 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-600 hover:border-transparent rounded"
                 >
-                  Add Vehicle
+                  Add Coupon
                 </button>
               </div>
 
@@ -96,7 +88,7 @@ const AdminVehicle = () => {
                             type="checkbox"
                             className="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700"
                           />
-                          <span>Image</span>
+                          <span>No</span>
                         </div>
                       </th>
                       <th
@@ -104,7 +96,7 @@ const AdminVehicle = () => {
                         className="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
                       >
                         <button className="flex items-center gap-x-2">
-                          <span>Name</span>
+                          <span>Coupon Code</span>
                         </button>
                       </th>
                       <th
@@ -112,20 +104,20 @@ const AdminVehicle = () => {
                         className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
                       >
                         <button className="flex items-center gap-x-2">
-                          <span>Min weight</span>
+                          <span>Discount</span>
                         </button>
                       </th>
                       <th
                         scope="col"
                         className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
                       >
-                        Max weight
+                        Max Discount
                       </th>
                       <th
                         scope="col"
                         className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
                       >
-                        Price/Km
+                        Expiry Date
                       </th>
                       <th
                         scope="col"
@@ -135,7 +127,7 @@ const AdminVehicle = () => {
                       </th>
                     </tr>
                   </thead>
-                  {vehicleList.map((obj) => (
+                  {couponList.map((obj) => (
                     <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
                       <tr>
                         <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
@@ -147,10 +139,10 @@ const AdminVehicle = () => {
                             <div className="flex items-center gap-x-2">
                               <div>
                                 <h2 className="font-medium text-gray-800 dark:text-white ">
-                                  <img
+                                  {/* <img
                                     className="h-10 w-10"
-                                    src={obj?.Image}
-                                  ></img>
+                                    // src={obj?.Image}
+                                  ></img> */}
                                 </h2>
                               </div>
                             </div>
@@ -160,18 +152,18 @@ const AdminVehicle = () => {
                           <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
                             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                             <h2 className="text-sm font-normal text-emerald-500">
-                              {obj?.vehicle}
+                              {obj?.couponCode}
                             </h2>
                           </div>
                         </td>
                         <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                          {obj?.minWeight}
+                          {obj?.discount}
                         </td>
                         <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                          {obj?.maxWeight}
+                          {obj?.maxDiscount}
                         </td>
                         <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                          {obj?.pricePerKm}
+                          {obj?.expiryDate}
                         </td>
                         <td className="px-4 py-4 text-sm whitespace-nowrap">
                           <div className="flex items-center gap-x-6">
@@ -212,13 +204,13 @@ const AdminVehicle = () => {
                         <td className="px-4 py-4 text-sm whitespace-nowrap"></td>
                       </tr>
                     </tbody>
-                  ))}
+                ))}  
                 </table>
               </div>
             </div>
           </div>
         </div>
-        {vehicleList.length >= 8 && (
+        {couponList.length >= 8 && (
           <div className="flex items-center justify-between mt-6">
             <a
               href="#"
@@ -305,7 +297,7 @@ const AdminVehicle = () => {
               </svg>
             </a>
           </div>
-        )}
+        )} 
       </section>
 
       <div>
@@ -342,23 +334,23 @@ const AdminVehicle = () => {
                 </button>
                 <div className="px-6 py-6 lg:px-8">
                   <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-                    Add Vehicle
+                    Add Coupon
                   </h3>
                   <form className="space-y-6" action="#">
                     <div>
                       <label
-                        htmlFor="vehicle"
+                        htmlFor="Coupon Code"
                         className=" mb-2 text-sm font-medium text-gray-900 dark:text-white"
                       ></label>
                       <input
                         type="text"
-                        value={vehicle}
+                        value={couponCode}
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                        placeholder="Name of vehicle"
-                        onChange={(e) => setVehicle(e.target.value)}
+                        placeholder="Coupon Code"
+                        onChange={(e) => setCouponCode(e.target.value)}
                       />
                     </div>
-                    <div>
+                    {/* <div>
                       <label
                         htmlFor="image"
                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -369,47 +361,46 @@ const AdminVehicle = () => {
                         className="block w-full mb-5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                         id="default_size"
                         type="file"
-                        onChange={(e) => handleImage(e, setImagefile)}
                       />
-                    </div>
+                    </div> */}
                     <div>
                       <label
-                        htmlFor="MinWeight"
+                        htmlFor="Discount"
                         className=" mb-2 text-sm font-medium text-gray-900 dark:text-white"
                       ></label>
                       <input
                         type="number"
-                        value={minWeight}
+                        value={discount}
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                        placeholder="Min weight"
-                        onChange={(e) => setMinWeight(e.target.value)}
+                        placeholder="Discount"
+                        onChange={(e) => setDiscount(e.target.value)}
                       />
                     </div>
 
                     <div>
                       <label
-                        htmlFor="Max weight"
+                        htmlFor="Max Discount"
                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                       ></label>
                       <input
                         type="number"
-                        value={maxWeight}
+                        value={maxDiscount}
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                        placeholder="Min Weight"
-                        onChange={(e) => setMaxWeight(e.target.value)}
+                        placeholder="Max Discount"
+                        onChange={(e) => setMaxDiscount(e.target.value)}
                       />
                     </div>
                     <div>
                       <label
-                        htmlFor="Max weight"
+                        htmlFor="Expiry Date"
                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                       ></label>
                       <input
-                        type="number"
-                        value={pricePerKm}
+                        type="date"
+                        value={expiryDate}
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                        placeholder="Price/Km"
-                        onChange={(e) => setPricePerKm(e.target.value)}
+                        placeholder="Expiry Date"
+                        onChange={(e) => setExpiryDate(e.target.value)}
                       />
                     </div>
                     {/* <div className="flex justify-between">
@@ -460,7 +451,7 @@ const AdminVehicle = () => {
         )}
       </div>
     </>
-  );
-};
+  )
+}
 
-export default AdminVehicle;
+export default AdminCoupon

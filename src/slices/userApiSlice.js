@@ -1,4 +1,5 @@
 import { apiSlice } from "./apiSlice";
+import { BACKEND_URL } from '../services/helper.js'
 
 const USER_URL = "http://localhost:4002";
 

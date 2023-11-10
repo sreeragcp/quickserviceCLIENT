@@ -1,0 +1,22 @@
+.chats::-webkit-scrollbar{
+    display:none
+}
+
+.cycle{
+    mix-blend-mode: darken;
+    z-index: 10;
+    left: -100px;
+    animation: moveLeftToRight 15s linear infinite;
+}
+
+@keyframes moveLeftToRight {
+    0% {
+      transform: translateX(-100px);
+    }
+    100% {
+      transform: translatex(1500px);
+    }
+}
+.abc {
+    transform: rotate(180deg);
+  }

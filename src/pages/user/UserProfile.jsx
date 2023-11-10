@@ -1,23 +1,56 @@
 import React, { useState, useEffect } from "react";
 import UserNavBar from "../../components/user/UserNavBar";
 import toast, { Toaster } from "react-hot-toast";
-import axios from "axios";
-import {useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import { userProfileFunction } from "../../services/Apis";
-
-
+import { profileEditFunction } from "../../services/Apis";
 
 const UserProfile = () => {
-  const [name,setName] = useState('')
+  const [resData ,setResData] =useState(false)
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
   const [userData, setUserData] = useState([]);
-  const user = useSelector((state) => state.user.userData)
-  const userId =user._id
+  const [fieldBeingEdited, setFieldBeingEdited] = useState(null);
+
+  const user = useSelector((state) => state.user.userData);
+  const userId = user._id;
+
+  const closeModal = () => {
+    const modal = document.getElementById("my_modal_5");
+    modal.close();
+  };
+
+  const handleEdit = (fieldName) => {
+    setFieldBeingEdited(fieldName);
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    closeModal();
+
+    try {
+      const data = {};
+
+      if (fieldBeingEdited === "name") {
+        data.name = name;
+      } else if (fieldBeingEdited === "email") {
+        data.email = email;
+      } else if (fieldBeingEdited === "mobile") {
+        data.mobile = mobile;
+      }
+      const res = await profileEditFunction(userId, data);
+      if(res.data.message==="User updated successfully"){
+                 setResData(true)
+      }
+    } catch (err) {
+      toast.error("internal server error");
+    }
+  };
 
   const fetchUser = async () => {
-
-    console.log("inside the fetch uesr");
     try {
-      const res = await userProfileFunction(userId)
+      const res = await userProfileFunction(userId);
 
       if (res.data) {
         setUserData(res.data);
@@ -31,7 +64,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     fetchUser();
-  },[]);
+  },[resData]);
 
   return (
     <>
@@ -57,22 +90,22 @@ const UserProfile = () => {
           <h1 className=" mt-12 text-3xl font-bold text-gray-900 dark:text-white">
             My Account
           </h1>
-          
+
           <div className="flex">
             <div>
-            <div className="mt-14">
+              <div className="mt-14">
                 <p className="font-medium text-gray-500 dark:text-gray-400">
                   My Name :
                 </p>
               </div>
               <div className="mt-7">
                 <p className="font-medium text-gray-500 dark:text-gray-400">
-                  Email : 
+                  Email :
                 </p>
               </div>
               <div className="mt-7">
                 <p className="font-medium text-gray-500 dark:text-gray-400">
-                  Mobile : 
+                  Mobile :
                 </p>
               </div>
               <div className="mt-7">
@@ -80,59 +113,33 @@ const UserProfile = () => {
                   Address :
                 </p>
               </div>
-              </div>
-              <div className="ml-5">
+            </div>
+            <div className="ml-5">
               <div className="mt-14">
                 <p className="font-medium text-gray-500 dark:text-gray-400">
-                 {userData.name}
+                  {userData.name}
                 </p>
               </div>
               <div className="mt-7">
                 <p className="font-medium text-gray-500 dark:text-gray-400">
-                {userData.email}
+                  {userData.email}
                 </p>
               </div>
               <div className="mt-7">
                 <p className="font-medium text-gray-500 dark:text-gray-400">
-                {userData.mobile}
+                  {userData.mobile}
                 </p>
               </div>
               <div className="mt-7">
-                <p className="font-medium text-gray-500 dark:text-gray-400">
-                
-                </p>
+                <p className="font-medium text-gray-500 dark:text-gray-400"></p>
               </div>
-              </div>
-              </div>
-              <div>
-  {/* <table className="w-full">
-    <tbody>
-      <tr>
-        <td className="font-medium text-gray-500 dark:text-gray-400">My Name:</td>
-        <td>{userData.name}</td>
-      </tr>
-      <tr className="border border-black ">
-        <td className="font-medium text-gray-500 dark:text-gray-400">Email:</td>
-        <td>{userData.email}</td>
-      </tr>
-      <tr>
-        <td className="font-medium text-gray-500 dark:text-gray-400">Mobile:</td>
-        <td>{userData.mobile}</td>
-      </tr>
-      <tr>
-        <td className="font-medium text-gray-500 dark:text-gray-400">Address:</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table> */}
-</div>
-
-        
+            </div>
+          </div>
 
           <div className="mt-6 ml-52">
             <button
               type="button"
-              onClick={()=>document.getElementById('my_modal_5').showModal()}
+              onClick={() => document.getElementById("my_modal_5").showModal()}
               className="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
             >
               Edit
@@ -141,24 +148,24 @@ const UserProfile = () => {
         </div>
       </div>
 
-<dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
-  <div className="modal-box">
-    <h3 className="font-bold text-lg">Edit</h3>
-    <div className="flex">
+      <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Edit</h3>
+          <div className="flex">
             <div className="ml-7">
-            <div className="mt-11">
+              <div className="mt-11">
                 <p className="font-medium text-gray-500 dark:text-gray-400">
                   My Name :
                 </p>
               </div>
               <div className="mt-7">
                 <p className="font-medium text-gray-500 dark:text-gray-400">
-                  Email : 
+                  Email :
                 </p>
               </div>
               <div className="mt-7">
                 <p className="font-medium text-gray-500 dark:text-gray-400">
-                  Mobile : 
+                  Mobile :
                 </p>
               </div>
               <div className="mt-7">
@@ -166,37 +173,50 @@ const UserProfile = () => {
                   Address :
                 </p>
               </div>
-              </div>
-              <div className="ml-16">
+            </div>
+            <div className="ml-16">
               <div className="mt-11">
-              <input type="text" 
-              placeholder={userData.name}  
-              className="input w-full max-w-xs h-8"
-              onChange={(e)=>setName((e).target.value)} />
+                <input
+                  type="text"
+                  placeholder={userData.name}
+                  className="input w-full max-w-xs h-8"
+                  onChange={(e) => setName(e.target.value)}
+                  onFocus={() => handleEdit("name")}
+                />
               </div>
               <div className="mt-5">
-              <input type="text" placeholder= {userData.email} className="input w-full max-w-xs h-8" />
+                <input
+                  type="text"
+                  placeholder={userData.email}
+                  className="input w-full max-w-xs h-8"
+                  onChange={(e) => setEmail(e.target.value)}
+                  onFocus={() => handleEdit("email")}
+                />
               </div>
               <div className="mt-5">
-              <input type="text" placeholder= {userData.mobile} className="input w-full max-w-xs h-8" />
+                <input
+                  type="text"
+                  placeholder={userData.mobile}
+                  className="input w-full max-w-xs h-8"
+                  onChange={(e) => setMobile(e.target.value)}
+                  onFocus={() => handleEdit("mobile")}
+                />
               </div>
               <div className="mt-7">
-                <p className="font-medium text-gray-500 dark:text-gray-400">
-                
-                </p>
+                <p className="font-medium text-gray-500 dark:text-gray-400"></p>
               </div>
-              </div>
-              </div>
-              <div>
-                </div>
-    <div className="modal-action">
-      <form method="dialog">
-        {/* if there is a button in form, it will close the modal */}
-        <button className="btn">Submit</button>
-      </form>
-    </div>
-  </div>
-</dialog>
+            </div>
+          </div>
+          <div></div>
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn" onClick={submitHandler}>
+                Submit
+              </button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </>
   );
 };

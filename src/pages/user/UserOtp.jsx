@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, {useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserOtpMutation } from "../../slices/userApiSlice";
-import { ToastContainer, toast } from "react-toastify";
-import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const UserOtp = () => {
+
   const [otp1, setOtp1] = useState("");
   const [otp2, setOtp2] = useState("");
   const [otp3, setOtp3] = useState("");
@@ -22,10 +22,9 @@ const UserOtp = () => {
 
       const storedUserData = JSON.parse(localStorage.getItem("userData"));
       storedUserData["otp"] = otpValue;
-
-      const res = await axios.post("http://localhost:4002/otp",storedUserData);
-
-      if (res.data.message === "success") {
+      const res = await userOtp(storedUserData).unwrap();
+          console.log(res,"this is the res");
+      if (res.message === "success") {
         toast.success("Verification successful!");
         navigate("/signin");
       } else if (res.data.message === "Entered mail is already registered") {
@@ -39,8 +38,10 @@ const UserOtp = () => {
   };
 
   return (
+    <>
+    <Toaster position="top-right" reverseOrder={false} />
     <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-cyan-100 py-12 bg-cover">
-      <ToastContainer />
+     
       <div className="relative bg-white px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
         <div className="mx-auto flex w-full max-w-md flex-col space-y-16">
           <div className="flex flex-col items-center justify-center text-center space-y-2">
@@ -126,6 +127,7 @@ const UserOtp = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

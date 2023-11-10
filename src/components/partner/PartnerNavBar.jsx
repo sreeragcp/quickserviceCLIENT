@@ -1,6 +1,7 @@
 import React,{useState} from "react";
 import { NavLink } from "react-router-dom";
 
+
 const PartnerNavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -25,7 +26,7 @@ const PartnerNavBar = () => {
               />
             </a> */}
 
-              <h1 className="font-bold ">Quick Service</h1>
+              <h1 className="font-bold ">Service Partner</h1>
 
               <div className="flex lg:hidden">
                 <button
@@ -81,18 +82,30 @@ const PartnerNavBar = () => {
               }`}
             >
               <div className="flex flex-col -mx-6 lg:flex-row lg:items-center lg:mx-8">
+                <NavLink to="/partner">
                 <a
                   href="#"
                   className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors  duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125    "
                 >
                   Dashboard
                 </a>
+                </NavLink>
+                <NavLink to="/partner/orderManage">
+                <a
+                  href="#"
+                  className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors  duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125    "
+                >
+                  OrderManage
+                </a>
+                </NavLink>
+                <NavLink to="/partner/bookings">
                 <a
                   href="#"
                   className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "
                 >
                   Bookings
                 </a>
+                </NavLink>
                 <a
                   href="#"
                   className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "
@@ -103,7 +116,8 @@ const PartnerNavBar = () => {
                   href="#"
                   className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "
                 >
-                  Profile
+                  <NavLink to="/partner/profile">Profile</NavLink>
+                  
                 </a>
                 {/* <a
                   href="#"

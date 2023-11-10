@@ -1,97 +1,234 @@
-import React, { useEffect, useState } from 'react'
-import AdminNavBar from '../../components/admin/AdminNavBar'
-import axios from 'axios'
+import React, { useEffect, useState } from "react";
+import AdminNavBar from "../../components/admin/AdminNavBar";
+import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-
-
+import { verifyPartnerFunction } from "../../services/Apis";
 
 const AdminPartnerList = () => {
+  const [partnersData, setPartnersData] = useState([]);
+  const [verify,setVerify] = useState(false)
 
-    const [partnersData,setPartnersData] = useState([])
+  const fetchPartners = async () => {
+    try {
+      const res = await axios.get("http://localhost:4002/admin/partnersList")
 
-        const fetchPartners = async()=>{
+      if (res.data) {
+        setPartnersData(res.data);
+      } else if (res.data.message === "No partner data found") {
+        toast.warning("No partner data found");
+      }
+    } catch (error) {
+      toast.error("An error occurred while fetching partner data");
+    }
+  };
 
-            console.log('inside the fetch partner');
-            try {
-                const res = await axios.get("http://localhost:4002/admin/partnersList")
+  useEffect(() => {
+    fetchPartners();
+  }, []);
 
-                console.log(res,"this is the response");
-                
-                if(res.data){
-                    setPartnersData(res.data)
-                }
-                else if(res.data.message==="No partner data found"){
-
-                    toast.warning("No partner data found")
-                }
-
-            } catch (error) {
-                toast.error("An error occurred while fetching partner data")
-            }
-        }
-
-        useEffect(()=>{
-            fetchPartners()
-        },[])
+  const userVerify = async (partnerId) => {
+    console.log("inside the userVerify");
+    console.log(partnerId,"this is the partnerid");
+    try {
+      const res = await verifyPartnerFunction({partnerId});
+      if(res.data){
+            setVerify(true)
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
 
   return (
     <>
-    <AdminNavBar/>
+      <AdminNavBar />
 
-    <div className="mt-20 ml-60 max-w-5xl">
-  <table className="table ">
-    {/* head */}
-    <thead>
-      <tr>
-        <th>
-          <label>
-            <input type="checkbox" className="checkbox" />
-          </label>
-        </th>
-        <th>Name</th>
-        <th>Mobile</th>
-        <th>Email</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {partnersData.map((obj)=>(
-         <tr>
-         <th>
-           <label>
-             <input type="checkbox" className="checkbox" />
-           </label>
-         </th>
-         <td>
-           <div className="flex items-center space-x-3">
-             {/* <div className="avatar">
+      <div className="mt-20 ml-60 max-w-5xl">
+        <table className="table ">
+          {/* head */}
+          <thead>
+            <tr>
+              <th>
+                <label>
+                  <input type="checkbox" className="checkbox" />
+                </label>
+              </th>
+              <th>Name</th>
+              <th>Mobile</th>
+              <th>Email</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {partnersData.map((obj) => (
+              <tr>
+                <th>
+                  <label>
+                    <input type="checkbox" className="checkbox" />
+                  </label>
+                </th>
+                <td>
+                  <div className="flex items-center space-x-3">
+                    {/* <div className="avatar">
                <div className="mask mask-squircle w-12 h-12">
                  <img src="/tailwind-css-component-profile-2@56w.png" alt="Avatar Tailwind CSS Component" />
                </div>
              </div> */}
-             <div>
-               <div className="font-bold">{obj?.name}</div>
-             </div>
-           </div>
-         </td>
-         <td>
-           {obj?.mobile}
-         </td>
-         <td>{obj?.email}</td>
-         <th>
-           <button className="btn btn-ghost btn-xs">details</button>
-         </th>
-       </tr>
+                    <div>
+                      <div className="font-bold">{obj?.name}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>{obj?.mobile}</td>
+                <td>{obj?.email}</td>
+                <th>
+                  <button
+                    className="btn btn-ghost btn-xs"
+                    onClick={() =>
+                      document.getElementById("my_modal_1").showModal()
+                    }
+                  >
+                    details
+                  </button>
+                </th>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {partnersData.map((obj) => (
+        <dialog id="my_modal_1" className="modal">
+          <div className="modal-box enlarged">
+            <div className="avatar ml-44">
+              <div className="w-24 rounded">
+                <img src="..\images\download (5).jpeg" />
+              </div>
+            </div>
+            <button
+              className="btn btn-wide ml-24"
+              onClick={()=>userVerify(obj?._id)}
+            >
+             {verify?"verified":"verify"}
+            </button>
+            <div className="flex ml-1 mt-7">
+              <div>
+                <div className="">
+                  <p className="font-medium text-gray-500 dark:text-gray-400">
+                    My Name :
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <p className="font-medium text-gray-500 dark:text-gray-400">
+                    Email :
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <p className="font-medium text-gray-500 dark:text-gray-400">
+                    Mobile :
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <p className="font-medium text-gray-500 dark:text-gray-400">
+                    State :
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <p className="font-medium text-gray-500 dark:text-gray-400">
+                    City :
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <p className="font-medium text-gray-500 dark:text-gray-400">
+                    Pin :
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <p className="font-medium text-gray-500 dark:text-gray-400">
+                    Vehicle :
+                  </p>
+                </div>
+              </div>
+              <div className="ml-5">
+                <div className="">
+                  <p className="font-medium text-gray-500 dark:text-gray-400">
+                    {obj?.name}
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <p className="font-medium text-gray-500 dark:text-gray-400">
+                    {obj?.email}
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <p className="font-medium text-gray-500 dark:text-gray-400">
+                    {obj?.mobile}
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <p className="font-medium text-gray-500 dark:text-gray-400">
+                    {obj?.state}
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <p className="font-medium text-gray-500 dark:text-gray-400">
+                    {obj?.city}
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <p className="font-medium text-gray-500 dark:text-gray-400">
+                    {obj?.pin}
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <p className="font-medium text-gray-500 dark:text-gray-400">
+                    {obj?.vehicle}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="flex w-auto enlarged ">
+              <div className="w-96 mt-7 h-32 rounded-md shadow-md border">
+                <img
+                  className="h-28 rounded-md"
+                  src={obj?.aadhar}
+                  alt="adhaar"
+                />
+              </div>
+              <div className="w-96 mt-7 ml-9 h-32 rounded-md shadow-md border">
+                <img
+                  className="h-28 rounded-md"
+                  src={obj?.liscense}
+                  alt="liscense"
+                />
+              </div>
+            </div>
+            <div className="flex w-auto enlarged ">
+              <div className="w-96 mt-7 h-32 rounded-md shadow-md">
+                <img
+                  className="h-28 rounded-md"
+                  src={obj?.insurance}
+                  alt="insurance"
+                />
+              </div>
+              <div className="w-96 mt-7 ml-9 h-32 rounded-md shadow-md">
+                <img
+                  className="h-28 rounded-md"
+                  src={obj?.rcFile}
+                  alt="rcFile"
+                />
+              </div>
+            </div>
+            <div className="modal-action">
+              <form method="dialog">
+                <button className="btn">Close</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
       ))}
-     
-    </tbody>
-    
-  </table>
-</div>
-
     </>
-  )
-}
+  );
+};
 
-export default AdminPartnerList
+export default AdminPartnerList;
