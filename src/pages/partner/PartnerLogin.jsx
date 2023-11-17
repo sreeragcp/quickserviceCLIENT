@@ -5,8 +5,21 @@ import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { setCredentials } from "../../slices/authSlice";
 import { useDispatch,useSelector } from "react-redux";
+import { partnerSigninValidation } from "../../validations/PartnerValidation";
+import { useFormik } from "formik";
+
+
+
+
 
 const PartnerLogin = () => {
+
+  const initialValues = {
+    email: "",
+    password: "",
+  };
+
+
   const dispatch = useDispatch()
 
   const [email, setEmail] = useState("");
@@ -14,39 +27,75 @@ const PartnerLogin = () => {
 
   const navigate = useNavigate();
 
-  const { partnerData } = useSelector((state) => state.user);
+  const  partnerData  = useSelector((state) => state.partnerData);
 
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    try {
-      const data = { email, password };
-      const res = await axios.post("http://localhost:4002/partner/login", data);
-      const partner = res.data.partnerData;
-      const {partnerData} = res
 
-      dispatch(setCredentials({partnerData}))
+  const formik = useFormik({
+    initialValues: initialValues,
+    validationSchema: partnerSigninValidation,
+    onSubmit: async (values) => {
+      try {
 
-      const partnerDataJSON = JSON.stringify(partner);
-      const partnerId = JSON.stringify(partner._id);
-      localStorage.setItem('partnerId',partnerId)
-      localStorage.setItem("partnerData", partnerDataJSON);
+        const data ={
+          email : values.email,
+          password: values.password
+        }
+
+        const res = await axios.post("http://localhost:4002/partner/login", data);
+        const partner = res.data.partnerData;
+        console.log(partner,"this is the partner");
+        const {partnerData} = res
+
+        console.log(res,"this is the rwponse");
+
+        dispatch(setCredentials({partner}))
+
+        const partnerDataJSON = JSON.stringify(partner);
+        const partnerId = JSON.stringify(partner._id);
+        localStorage.setItem('partnerId',partnerId)
+        localStorage.setItem("partnerData", partnerDataJSON);
+        
+        if (res.data.message === "success") {
+          navigate("/partner");
+        }
+      } catch (error) {
+        toast.error(err?.data?.message || err.error);
+      }
+    }
+    })
+
+
+  // const submitHandler = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const data = { email, password };
+  //     const res = await axios.post("http://localhost:4002/partner/login", data);
+  //     const partner = res.data.partnerData;
+  //     const {partnerData} = res
+
+  //     dispatch(setCredentials({partnerData}))
+
+  //     const partnerDataJSON = JSON.stringify(partner);
+  //     const partnerId = JSON.stringify(partner._id);
+  //     localStorage.setItem('partnerId',partnerId)
+  //     localStorage.setItem("partnerData", partnerDataJSON);
   
 
-      if (res.data.message === "success") {
-        navigate("/partner");
-      }
-    } catch (err) {
-      toast.error(err?.data?.message || err.error);
-    }
-  };
+  //     if (res.data.message === "success") {
+  //       navigate("/partner");
+  //     }
+  //   } catch (err) {
+  //     toast.error(err?.data?.message || err.error);
+  //   }
+  // };
   return (
     <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-12 bg-cover">
       <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl relative top-4">
         <div className="hidden bg-cover lg:block lg:w-1/2 justify-center items-center">
           <img
             className="w-auto h-80 sm:h-80 relative top-28"
-            src="./images/bulk-booking.jpg"
+            src="/images/bulk-booking.jpg"
             alt=""
           />
         </div>
@@ -100,9 +149,18 @@ const PartnerLogin = () => {
               id="LoggingEmailAddress"
               className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              // value={email}
+              // onChange={(e) => setEmail(e.target.value)}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.email}
             />
+             {formik.touched.email && formik.errors.email && (
+                  <div className="text-red-500 text-sm">
+                    {formik.errors.email}
+                  </div>
+                )}
           </div>
 
           <div className="mt-4">
@@ -124,15 +182,24 @@ const PartnerLogin = () => {
               id="loggingPassword"
               className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              // value={password}
+              // onChange={(e) => setPassword(e.target.value)}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.password}
             />
+            {formik.touched.password && formik.errors.password && (
+                  <div className="text-red-500 text-sm">
+                    {formik.errors.password}
+                  </div>
+                )}
           </div>
 
           <div className="mt-6">
             <button
               className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50"
-              onClick={submitHandler}
+              onClick={formik.handleSubmit}
             >
               Sign In
             </button>

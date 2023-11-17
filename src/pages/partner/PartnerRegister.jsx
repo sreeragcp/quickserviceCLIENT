@@ -3,27 +3,11 @@ import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { vehicleFetchFunction } from "../../services/Apis";
-import { partnerSignupValidation } from "../../validations/PartnerValidation";
-import { useFormik } from "formik";
-import * as yup from "yup";
-
-const initialValues = {
-  name: "",
-  email: "",
-  mobile: "",
-  password: "",
-  confirmPassword: "",
-  adhaar: "",
-  liscense: "",
-  insurance: "",
-  rc: "",
-  state: "",
-  city: "",
-  pin: "",
-};
+import PartnerNavBar from "../../components/partner/PartnerNavBar";
 
 const PartnerRegister = () => {
   const [step, setStep] = useState(0);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
@@ -67,66 +51,43 @@ const PartnerRegister = () => {
     }
   };
 
-  const formik = useFormik({
-    initialValues: initialValues,
-    validationSchema: partnerSignupValidation,
-    onSubmit: async (values) => {
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      toast.error("Password do not match");
+    } else {
       try {
-        // const partnerData = {
-        //   name: values.name,
-        //   email:values.email,
-        //   mobile:values.mobile,
-        //   password:values.password,
-        //   aadharFile:values.adhaar
-        //   // licenseFile,
-        //   insuranceFile,
-        //   rcFile,
-        //   vehicle,
-        //   state,
-        //   city,
-        //   pin,
-        // };
-      } catch (error) {}
-    },
-  });
+        const partnerData = {
+          name,
+          email,
+          mobile,
+          password,
+          aadharFile,
+          licenseFile,
+          insuranceFile,
+          rcFile,
+          vehicle,
+          state,
+          city,
+          pin,
+        };
 
-  // const submitHandler = async (e) => {
-  //   e.preventDefault();
-  //   if (password !== confirmPassword) {
-  //     toast.error("Password do not match");
-  //   } else {
-  //     try {
-  //       const partnerData = {
-  //         name,
-  //         email,
-  //         mobile,
-  //         password,
-  //         aadharFile,
-  //         licenseFile,
-  //         insuranceFile,
-  //         rcFile,
-  //         vehicle,
-  //         state,
-  //         city,
-  //         pin,
-  //       };
+        localStorage.setItem("partnerData", JSON.stringify(partnerData));
 
-  //       localStorage.setItem("partnerData", JSON.stringify(partnerData));
+        const res = await axios.post(
+          "http://localhost:4002/partner/register",
+          partnerData
+        );
+        console.log(res, "respose from the register");
 
-  //       const res = await axios.post(
-  //         "http://localhost:4002/partner/register",
-  //         partnerData
-  //       );
-  //       console.log(res, "respose from the register");
-
-  //       if (res.data.message === "success") {
-  //         navigate("/partner/otp");
-  //       }
-  //     } catch (error) {
-  //       toast.error(error);
-  //     }
-  //   }
-  // };
+        if (res.data.message === "success") {
+          navigate("/partner/otp");
+        }
+      } catch (error) {
+        toast.error(error);
+      }
+    }
+  };
 
   const vehicleFetch = async () => {
     console.log("inside the vehicleFEtch");
@@ -148,6 +109,8 @@ const PartnerRegister = () => {
   }, []);
 
   return (
+   <>
+   <PartnerNavBar/>
     <div className=" w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl relative top-20 ">
       <div className="flex justify-center">
         <ol className="flex justify-evenly w-full p-3 space-x-3 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-sm dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 sm:space-x-4">
@@ -242,7 +205,7 @@ const PartnerRegister = () => {
             Register
           </p>
           <img
-            className="w-auto h-auto relative top-28"
+            className=" ml-6 w-80 h-auto relative top-28"
             src="/images/istockphoto-1271659810-1024x1024.jpg"
             alt=""
           />
@@ -250,6 +213,8 @@ const PartnerRegister = () => {
 
         {step === 0 && (
           <div className="w-full px-6 py-8 md:px-8 lg:w-1/2">
+            
+
             <div className="mt-4">
               <label
                 className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200"
@@ -262,11 +227,8 @@ const PartnerRegister = () => {
                 className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
                 type="text"
                 placeholder="Enter Name"
-                // value={name}
-                // onChange={(e) => setName(e.target.value)}
-                onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.name}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div className="mt-4">
@@ -280,13 +242,9 @@ const PartnerRegister = () => {
                 id="LoggingEmailAddress"
                 className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
                 type="email"
-                name="email"
                 placeholder="Enter Email"
-                // value={email}
-                // onChange={(e) => setEmail(e.target.value)}
-                onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.email}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
@@ -301,13 +259,9 @@ const PartnerRegister = () => {
                 id="LoggingMobile"
                 className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
                 type="number"
-                name="email"
                 placeholder="Enter Number"
-                // value={mobile}
-                // onChange={(e) => setMobile(e.target.value)}
-                onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.mobile}
+                value={mobile}
+                onChange={(e) => setMobile(e.target.value)}
               />
             </div>
 
@@ -322,13 +276,9 @@ const PartnerRegister = () => {
                 id="LoggingPassword"
                 className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
                 type="password"
-                name="password"
                 placeholder="Password"
-                // value={password}
-                // onChange={(e) => setPassword(e.target.value)}
-                onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.password}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
@@ -345,13 +295,9 @@ const PartnerRegister = () => {
                 id="loggingConfirmPassword"
                 className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
                 type="password"
-                name="confirmPassword"
                 placeholder="Confirm Password"
-                // value={confirmPassword}
-                // onChange={(e) => setConfirmPassword(e.target.value)}
-                onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.confirmPassword}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
 
@@ -384,12 +330,8 @@ const PartnerRegister = () => {
                 className="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                 id="small_size"
                 type="file"
-                name="adhaar"
                 multiple
-                // onChange={(e) => handleImage(e, setAadharFile)}
-                onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.adhaar}
+                onChange={(e) => handleImage(e, setAadharFile)}
               />
             </div>
 
@@ -404,11 +346,7 @@ const PartnerRegister = () => {
                 className="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                 id="small_size"
                 type="file"
-                name="liscense"
-                // onChange={(e) => handleImage(e, setLicenseFile)}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.liscense}
+                onChange={(e) => handleImage(e, setLicenseFile)}
               />
             </div>
             <div className="mt-4">
@@ -419,19 +357,20 @@ const PartnerRegister = () => {
                 Vehicle Type
               </label>
               <div className="flex">
-                {vehicleData.map((obj) => (
-                  <div>
-                    <label className="ml-3">
-                      <input
-                        type="radio"
-                        value={obj?.vehicle}
-                        checked={vehicle === `${obj?.vehicle}`}
-                        onChange={handleVehicleChange}
-                      />
-                      {obj?.vehicle}
-                    </label>
-                  </div>
-                ))}
+
+              {vehicleData.map((obj)=>(
+           <div>
+           <label className="ml-3">
+             <input   
+               type="radio"
+               value={obj?.vehicle}
+               checked={vehicle === `${obj?.vehicle}`}
+               onChange={handleVehicleChange}
+             />
+             {obj?.vehicle}
+           </label>
+         </div>
+        ))}
               </div>
             </div>
 
@@ -446,11 +385,7 @@ const PartnerRegister = () => {
                 className="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                 id="small_size"
                 type="file"
-                name="insurance"
-                // onChange={(e) => handleImage(e, setInsuranceFile)}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.insurance}
+                onChange={(e) => handleImage(e, setInsuranceFile)}
               />
             </div>
 
@@ -465,11 +400,7 @@ const PartnerRegister = () => {
                 className="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                 id="small_size"
                 type="file"
-                name="rc"
-                // onChange={(e) => handleImage(e, setRcFile)}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.rc}
+                onChange={(e) => handleImage(e, setRcFile)}
               />
             </div>
 
@@ -503,17 +434,10 @@ const PartnerRegister = () => {
                 id="LoggingName"
                 className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
                 type="text"
-                name="state"
                 placeholder="Enter State"
-                // value={state}
-                // onChange={(e) => setState(e.target.value)}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.state}
+                value={state}
+                onChange={(e) => setState(e.target.value)}
               />
-              {formik.touched.state && formik.errors.state && (
-              <div className="text-red-500 text-sm">{formik.errors.state}</div>
-            )}
             </div>
             <div className="mt-4">
               <label
@@ -526,17 +450,10 @@ const PartnerRegister = () => {
                 id="LoggingEmailAddress"
                 className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
                 type="text"
-                name="city"
                 placeholder="Enter City"
-                // value={city}
-                // onChange={(e) => setCity(e.target.value)}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.city}
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
               />
-              {formik.touched.city && formik.errors.city && (
-              <div className="text-red-500 text-sm">{formik.errors.city}</div>
-            )}
             </div>
 
             <div className="mt-4">
@@ -550,17 +467,10 @@ const PartnerRegister = () => {
                 id="LoggingMobile"
                 className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
                 type="number"
-                name="pin"
                 placeholder="Enter Pin"
-                // value={pin}
-                // onChange={(e) => setPin(e.target.value)}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.pin}
+                value={pin}
+                onChange={(e) => setPin(e.target.value)}
               />
-              {formik.touched.pin && formik.errors.pin && (
-              <div className="text-red-500 text-sm">{formik.errors.pin}</div>
-            )}
             </div>
 
             <div className="mt-6">
@@ -581,6 +491,7 @@ const PartnerRegister = () => {
         )}
       </div>
     </div>
+   </>
   );
 };
 

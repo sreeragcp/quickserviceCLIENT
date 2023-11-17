@@ -8,6 +8,8 @@ import { functionFetchDetail } from "../../services/Apis";
 import { FaComments } from "react-icons/fa";
 import ChatContainerUser from "./ChatContainerUser";
 import InputTextUser from "./InputTextUser";
+import moment from 'moment';
+import UserFooter from "../../components/user/UserFooter";
 
 const UserBooking = () => {
   const [booking, setBooking] = useState([]);
@@ -15,12 +17,13 @@ const UserBooking = () => {
   const [data, setData] = useState([]);
   const [isChatModalOpen, setIsChatModalOpen] = useState(true);
 
-  const user = useSelector((state) => state.user.userData);
+  const user = useSelector((state) => state.tocken.userData);
+  const tocken = useSelector((state)=>state.tocken.tocken)
 
   const BookingDetails = async () => {
     try {
       const userId = user._id;
-      const res = await functionBookingDetail(userId);
+      const res = await functionBookingDetail(userId,tocken);
       setBooking([res.data]);
     } catch (error) {
       console.log(error.message);
@@ -32,12 +35,9 @@ const UserBooking = () => {
   }, [updateBooking]);
 
   const bookingCancel = async (bookingId) => {
-    console.log("inside the booking cancel");
-    console.log(bookingId, "this is the booking id ");
     try {
-      const res = await functionBookingCancel(bookingId);
+      const res = await functionBookingCancel(bookingId,tocken);
       setUpdateBooking(res.data);
-      console.log(res.data, "this is the response");
     } catch (error) {
       console.log(error.message);
     }
@@ -46,7 +46,7 @@ const UserBooking = () => {
   const handleButtonClick = async (id) => {
     const modal = document.getElementById("my_modal_1");
     modal.showModal();
-    const res = await functionFetchDetail(id);
+    const res = await functionFetchDetail(id,tocken);
     console.log(res, "this is the res");
     setData([res.data]);
   };
@@ -100,7 +100,7 @@ const UserBooking = () => {
                     </div>
                     <div className="flex w-full justify-between">
                       {obj.is_canceled ? (
-                        <h2 className="text-lg text-rose-700">CANCELED</h2>
+                        <h2 className="text-md mt-1 text-rose-700">CANCELED</h2>
                       ) : (
                         <h2></h2>
                       )}
@@ -215,15 +215,16 @@ const UserBooking = () => {
               </div>
             </div>
             {data.map((obj) => (
+               
               <div className="ml-5">
                 <div className="">
                   <p className="font-medium text-gray-500 dark:text-gray-400">
-                    {obj?._id}
+                    {obj?.booking_id}
                   </p>
                 </div>
                 <div className="mt-3">
                   <p className="font-medium text-gray-500 dark:text-gray-400">
-                    {obj?.bookingDate}
+                   { moment(obj.bookingDate).format("MMMM D, YYYY")}
                   </p>
                 </div>
                 <div className="mt-3">
@@ -267,6 +268,7 @@ const UserBooking = () => {
           </div>
         </div>
       </dialog>
+      <UserFooter/>
     </>
   );
 };

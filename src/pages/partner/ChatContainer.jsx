@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import socketIOClient from "socket.io-client";
 import ChatBoxReciever, { ChatBoxSender } from "./ChatBoxPartnerSide";
 import InputText from "./InputText";
+import { useSelector } from "react-redux";
+
 // import { useParams } from "react-router-dom";
 
 
@@ -10,6 +12,7 @@ const styles = {
 }
 
 const ChatContainer = ({ bookingId, userId, partnerId, closeChatModal }) => {
+;
 
   let socketio = socketIOClient("http://localhost:4002");
   // let socketio = socketIOClient("https://www.car-rentals.shop");
@@ -19,9 +22,8 @@ const ChatContainer = ({ bookingId, userId, partnerId, closeChatModal }) => {
   //   const { bookingId, userId, partnerId } = useParams();
 
   const [messageList, setMessageList] = useState([]);
-  const currentUserId = JSON.parse(localStorage.getItem("partnerId"));
 
-  console.log(currentUserId, "this si th e userdo");
+  const currentUserId = JSON.parse(localStorage.getItem("partnerId"));
 
   const [messageTriger, setMessageTriger] = useState(new Date());
 
@@ -44,7 +46,6 @@ const ChatContainer = ({ bookingId, userId, partnerId, closeChatModal }) => {
     };
   }, [messageTriger,bookingId]);
 
-  console.log(messageList, "-----------receivedMessages");
 
 
 
@@ -71,7 +72,7 @@ const ChatContainer = ({ bookingId, userId, partnerId, closeChatModal }) => {
     }
   }
 
-  console.log(messageList,"this is the ess");
+  console.log(message,"this is the message");
 
   return (
 
@@ -79,7 +80,7 @@ const ChatContainer = ({ bookingId, userId, partnerId, closeChatModal }) => {
       
       <div className=  "chats w-full h-[85%] overflow-y-scroll">
         
-        {messageList.map((chat, index) => {
+        {messageList?.map((chat,index) => {
 
           if (chat.sender === currentUserId) {
             return (
@@ -102,7 +103,7 @@ const ChatContainer = ({ bookingId, userId, partnerId, closeChatModal }) => {
           }
        
         })
-        } 
+        }
       </div>
       <div className="absolute w-full bottom-0">
         <InputText

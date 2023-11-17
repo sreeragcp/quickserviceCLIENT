@@ -11,15 +11,20 @@ import toast, { Toaster } from "react-hot-toast";
 import useRazorpay from "react-razorpay";
 import { functionBookingCompletion } from "../../services/Apis";
 import { useNavigate } from "react-router-dom";
+import UserFooter from "../../components/user/UserFooter";
+import { functionCouponApply } from "../../services/Apis";
 
 const UserVehicleDetail = () => {
   const [Razorpay] = useRazorpay();
   let amount;
   const socket = io("http://localhost:4002");
 
-  const token = useSelector((state) => state.user);
+  const token = useSelector((state) => state.tocken);
+  const tocken = useSelector((state)=>state.tocken.tocken)
 
-  const navigate = useNavigate()
+  console.log(token, "thissis token");
+
+  const navigate = useNavigate();
 
   const [vehicle, setVehicle] = useState([]);
   const [estimationPage, setEstimationPage] = useState(true);
@@ -32,12 +37,12 @@ const UserVehicleDetail = () => {
   const [email, setEmail] = useState("");
   const [room, setRoom] = useState("");
   const [bookingButton, setBookingButton] = useState("");
-  const [bookerName,setBookerName] = useState('')
-  const [phnNumber,setPhnNumber] = useState('')
+  const [bookerName, setBookerName] = useState("");
+  const [phnNumber, setPhnNumber] = useState("");
   // let distanceValue
 
-  console.log(bookerName,"this is the name");
-  console.log(phnNumber,"this is the phn Number");
+  console.log(bookerName, "this is the name");
+  console.log(phnNumber, "this is the phn Number");
 
   const { id } = useParams();
   const googleApiKey = import.meta.env.VITE_GOOGLE_MAP_API_KEY;
@@ -89,14 +94,15 @@ const UserVehicleDetail = () => {
   }, []);
 
   const fetchVehicle = async () => {
-    const res = await fetchVehicleDetails(id);
+  
+    const res = await fetchVehicleDetails(id,tocken);
     if (res.data) {
       setVehicle(res.data);
     }
   };
 
   const fetchCoupon = async () => {
-    const couponData = await fetchCouponData();
+    const couponData = await fetchCouponData(tocken);
     if (couponData.data) {
       setCoupon(couponData.data);
     }
@@ -159,7 +165,7 @@ const UserVehicleDetail = () => {
         travelMode: google.maps.TravelMode.DRIVING,
       })
       .then((response) => {
-        console.log(response,"this is the reponse");
+        console.log(response, "this is the reponse");
         directionsRenderer.setDirections(response);
         const route = response.routes[0];
         const leg = route.legs[0];
@@ -168,8 +174,7 @@ const UserVehicleDetail = () => {
         const pricePerKm = vehicle.pricePerKm;
         const price = totalDistance * pricePerKm;
         setPrice(price);
-        // navigate('/bookingCompletion')
-
+        setTotalPrice(price)
       })
       .catch((e) => {
         console.log(e);
@@ -181,9 +186,14 @@ const UserVehicleDetail = () => {
 
   /// coupon apply////
 
-  const applyCoupon = async () => {
-    const totalPrice = Math.floor(price - (price * coupon[0].discount) / 100);
-    setTotalPrice(totalPrice);
+  const applyCoupon = async (code) => {
+    const data ={code,price}
+    const res = await functionCouponApply(data,tocken)
+    console.log(res,"this is the apply coupon response");
+    if(res.data){
+      setTotalPrice(res.data);
+    }
+    toast.success("Coupon applied successfully");
   };
 
   ////booking/////
@@ -197,7 +207,7 @@ const UserVehicleDetail = () => {
         pickupPoint: pickupPoint,
         dropPoint: dropPoint,
       };
-      const res = await functionBookingHandle(userId, data);
+          const res = await functionBookingHandle(userId,data,tocken);
       if (res.data) {
         setPartner(res.data);
         setEmail(res.data._id);
@@ -233,12 +243,12 @@ const UserVehicleDetail = () => {
     const userData = token.userData;
     const data = {
       userData: userData,
-      partnerData:partner,
+      partnerData: partner,
       pickupPoint: pickupPoint,
       dropPoint: dropPoint,
       totalPrice: totalPrice,
-      number:phnNumber,
-      name:bookerName
+      number: phnNumber,
+      name: bookerName,
     };
     e.preventDefault();
     if (amount === "") {
@@ -251,8 +261,13 @@ const UserVehicleDetail = () => {
         currency: "INR",
         name: "STARTUP_PROJECTS",
         description: "for testing purpose",
-        handler: function (response) {
-          functionBookingCompletion(data);
+        handler: async function (response) {
+          if (response) {
+            const res = await functionBookingCompletion(data,tocken);
+            if (res.data.message === "success") {
+              navigate("/bookingCompletion");
+            }
+          }
         },
         prefill: {
           name: "Velmurugan",
@@ -275,14 +290,23 @@ const UserVehicleDetail = () => {
     }
   };
 
+  const [selectedCoupon, setSelectedCoupon] = useState('');
+
+  const handleCouponChange = (event) => {
+    const selectedValue = event.target.value;
+    setSelectedCoupon(selectedValue);
+    applyCoupon(selectedValue);
+  };
+
   return (
     <>
-      <UserNavBar/>
+      <UserNavBar />
       <Toaster position="top-right" reverseOrder={false} />
       {estimationPage ? (
         <div className=" relative">
           <div className=" h-96 ">
-            <img fill
+            <img
+              fill
               className="h-96 w-full"
               src="\images\delivery.jpg"
               alt=""
@@ -318,7 +342,7 @@ const UserVehicleDetail = () => {
                   <input
                     id="phn_number"
                     value={phnNumber}
-                    onChange={(e)=>setPhnNumber(e.target.value)}
+                    onChange={(e) => setPhnNumber(e.target.value)}
                     type="number"
                     placeholder="Contact details"
                     className=" mt-2 ml-2 input h-7 w-11/12 rounded-sm"
@@ -331,7 +355,7 @@ const UserVehicleDetail = () => {
                   <input
                     id="booker_name"
                     value={bookerName}
-                    onChange={(e)=>setBookerName(e.target.value)}
+                    onChange={(e) => setBookerName(e.target.value)}
                     type="text"
                     placeholder="Enter Name"
                     className=" mt-2 ml-2 input h-7 w-11/12 rounded-sm"
@@ -450,6 +474,7 @@ const UserVehicleDetail = () => {
                   </div>
                 </div>
 
+                {/* 
                 <div
                   type="button"
                   onClick={applyCoupon}
@@ -458,7 +483,22 @@ const UserVehicleDetail = () => {
                   <p className="text-lg text-white ml-3">
                     {coupon[0].couponCode}
                   </p>
-                </div>
+                </div> */}
+              </div>
+              <div className="ml-64">
+                <select
+                  name=""
+                  id=""
+                  value={selectedCoupon}
+                  onChange={handleCouponChange}
+                >
+                  <option value="">Select Coupon</option>
+                  {coupon.map((c, index) => (
+                    <option key={index} value={c.couponCode}>
+                      {c.couponCode}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="mt-6">
@@ -483,6 +523,8 @@ const UserVehicleDetail = () => {
           </div>
         </div>
       )}
+
+      <UserFooter />
     </>
   );
 };

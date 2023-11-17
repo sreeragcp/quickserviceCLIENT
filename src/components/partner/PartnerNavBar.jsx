@@ -1,13 +1,24 @@
-import React,{useState} from "react";
-import { NavLink } from "react-router-dom";
-
+import React, { useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../slices/authSlice";
 
 const PartnerNavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const n = useLocation();
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  const dispatch = useDispatch()
+  
+  const partnerData = useSelector((state)=>state.partnerData) 
+
+  const handleLogout = async()=>{
+    dispatch(logout());
+  }
 
   return (
     <div className="flex justify-center   h-fit mt-9">
@@ -82,61 +93,70 @@ const PartnerNavBar = () => {
               }`}
             >
               <div className="flex flex-col -mx-6 lg:flex-row lg:items-center lg:mx-8">
-                <NavLink to="/partner">
-                <a
-                  href="#"
-                  className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors  duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125    "
+                <NavLink
+                  to="/partner"
+                  className={
+                    location.pathname === "/partner"
+                      ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors  duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+                      : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors  duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+                  }
                 >
                   Dashboard
-                </a>
                 </NavLink>
-                <NavLink to="/partner/orderManage">
-                <a
-                  href="#"
-                  className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors  duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125    "
+                <NavLink
+                  to="/partner/orderManage"
+                  className={
+                    location.pathname === "/partner/orderManage"
+                      ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors  duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-200 border  hover:scale-110 "
+                      : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors  duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700  hover:scale-110  "
+                  }
                 >
                   OrderManage
-                </a>
                 </NavLink>
-                <NavLink to="/partner/bookings">
-                <a
-                  href="#"
-                  className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "
+                <NavLink
+                  to="/partner/bookings"
+                  className={
+                    location.pathname === "/partner/bookings"
+                      ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110   "
+                      : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+                  }
                 >
                   Bookings
-                </a>
                 </NavLink>
-                <a
-                  href="#"
-                  className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "
+              
+                <NavLink
+                  to="/partner/profile"
+                  className={
+                    location.pathname === "/partner/profile"
+                      ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110 "
+                      : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110 "
+                  }
                 >
-                  Location
-                </a>
-                <a
-                  href="#"
-                  className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "
-                >
-                  <NavLink to="/partner/profile">Profile</NavLink>
-                  
-                </a>
-                {/* <a
-                  href="#"
-                  className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "
-                >
-                  Vehicle
-                </a> */}
-                {/* <a
-                  href="#"
-                  className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "
-                >
-                  Location
-                </a> */}
-                {/* <a
-                  href="#"
-                  className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "
-                >
-                  Payment
-                </a> */}
+                  Profile
+                </NavLink>
+
+                {partnerData?
+              <NavLink
+             onClick={handleLogout}
+              // className={
+              //   location.pathname === "/signin"
+              //     ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+              //     : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+              // }
+            >
+              Sign Out
+            </NavLink>
+            :
+            <NavLink
+            to="/partner/signin"
+            className={
+              location.pathname === "/partner/signin"
+                ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+                : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+            }
+          >
+            Sign In
+          </NavLink>}
               </div>
 
               <div className="flex items-center mt-4 lg:mt-0">
@@ -146,14 +166,11 @@ const PartnerNavBar = () => {
                   aria-label="toggle profile dropdown"
                 >
                   <div className="w-8 h-8 overflow-hidden border-2 border-gray-400 rounded-full">
-                  <NavLink to="/partner/signin">
                     <img
-                    
                       src="https://imgs.search.brave.com/gxJ-fW7q71Wdlzc1ddKoafgQ0U90t9eh19w6WhmQ48E/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5zcHJvdXRzb2Np/YWwuY29tL3VwbG9h/ZHMvMjAyMi8wNi9w/cm9maWxlLXBpY3R1/cmUuanBlZw"
                       className="object-cover w-full h-full"
                       alt="avatar"
                     />
-                    </NavLink>
                   </div>
 
                   <h3 className="mx-2 text-gray-700 dark:text-gray-200 lg:hidden">

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import UserNavBar from "../../components/user/UserNavBar";
 import axios from "axios";
+import { useSelector } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import { Link, NavLink } from "react-router-dom";
 import UserFooter from "../../components/user/UserFooter";
@@ -10,6 +11,11 @@ const UserHome = () => {
   const [selectedCity, setSelectedCity] = useState('');
   const [vehicleData, setVehicleData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  
+  const tocken  = useSelector((state) => state.tocken.tocken);
+
+  console.log(tocken,"this is theh d token");
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -25,12 +31,21 @@ const UserHome = () => {
       setSelectedCity(cityName);
       setIsModalOpen(true);
     }
+    setIsModalOpen(false);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
 
 
   const fetchVehicle = async () => {
-    const vehicleData = await axios.get("http://localhost:4002/vehicleList");
+    const headers = {
+      'Authorization': `Bearer ${tocken}`,
+      'Content-Type': 'application/json',
+    };
+    const vehicleData = await axios.get("http://localhost:4002/vehicleList",{headers});
 
     if (vehicleData) {
       setVehicleData(vehicleData.data);
@@ -38,7 +53,11 @@ const UserHome = () => {
   };
 
   const fetchCity = async () => {
-    const res = await axios.get("http://localhost:4002/cityList");
+    const headers = {
+      'Authorization': `Bearer ${tocken}`,
+      'Content-Type': 'application/json',
+    };
+    const res = await axios.get("http://localhost:4002/cityList",{headers});
     if (res.data) {
       setCityList(res.data);
     } else if (res.data.message === "failed") {
@@ -68,12 +87,30 @@ const UserHome = () => {
 
       <div className=" absolute top-96 ml-44 card w-9/12 h-72 bg-base-100 shadow-xl mb-20">
         <div className="card-body">
-          <img
+          <div>
+
+            <div className="flex">
+            <img
+              onClick={openModal}
+              className="w-10 h-10 cursor-pointer animate-bounce"
+              src="./images/location.svg"
+              alt=""
+            />
+
+            <div className="mt-3">
+            city:
+            <input 
             onClick={openModal}
-            className="w-10 h-10 cursor-pointer animate-bounce"
-            src="./images/location.svg"
-            alt=""
-          />
+            value={selectedCity}
+            
+            className="border-b pl-5  border-dotted outline-none border-black cursor-pointer font-bold" type="text" />
+
+            </div>
+
+            </div>
+
+          </div>
+     
           <div className="card-actions">
             {vehicleData.map((obj) => (
               <div key={obj._id} className="cursor-pointer hover:scale-110 duration-700">
@@ -97,7 +134,7 @@ const UserHome = () => {
                 src="./images/east.svg"
                 alt=""
               />
-                        
+              
             </div>
           </div>
         </div>
@@ -109,9 +146,9 @@ const UserHome = () => {
           <div
             id="staticModal"
             data-modal-backdrop="static"
-            className="fixed  w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full border border-black"
+            className="fixed  w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full "
           >
-            <div className="ml-96 w-full max-w-3xl max-h-full  border border-black rounded-md">
+            <div className="ml-40 mt-16 w-full max-w-3xl max-h-full  rounded-md">
               {/* Modal content */}
               <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 {/* Modal header */}
@@ -121,7 +158,7 @@ const UserHome = () => {
                   </h3>
                   <button
                     type="button"
-                    // onClick={closeModal}
+                    onClick={closeModal}
                     className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                     data-modal-hide="staticModal"
                   >
@@ -140,7 +177,8 @@ const UserHome = () => {
                         d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
                       />
                     </svg>
-                    <span className="sr-only">Close modal</span>
+                    <span
+                    className="sr-only">Close modal</span>
                   </button>
                 </div>
                 {/* Modal body */}
@@ -149,7 +187,7 @@ const UserHome = () => {
                     <div onClick={() => handleCityClick(obj.city)}>
                       <div className=" h-36 w-36 border border-black  rounded-md cursor-pointer">
                         <img
-                          className="rounded-md cursor-pointer"
+                          className=" h-36 w-36 rounded-md cursor-pointer"
                           src={obj?.image}
                         ></img>
                       </div>

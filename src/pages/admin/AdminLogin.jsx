@@ -3,11 +3,17 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import { setCredentials } from "../../slices/authSlice";
+import { useDispatch,useSelector } from "react-redux";
 import axios from "axios";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch()
+
+  const  adminData  = useSelector((state) => state.adminData);
 
   const navigate = useNavigate();
 
@@ -17,7 +23,8 @@ const AdminLogin = () => {
 
         const data = {email,password}
         const res = await axios.post("http://localhost:4002/admin/login",data)
-
+        const adminData = res.data.admin
+        dispatch(setCredentials({adminData}))
       if (res.data.message === "success") {
           navigate("/admin");
         }

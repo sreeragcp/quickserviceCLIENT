@@ -17,7 +17,6 @@ const [user, setUser] = useState(localStorage.getItem("partnerData.name"));
 
 const [messageList, setMessageList] = useState([]);
 const currentUserId = JSON.parse(localStorage.getItem("userId"));
-console.log(currentUserId,"this isi the currentId");
 
 const [messageTriger, setMessageTriger] = useState(new Date());
 

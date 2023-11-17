@@ -24,6 +24,7 @@ const PartnerProfile = () => {
       res.status(500).json({ message: "Internal Server Error" });
     }
   };
+  console.log(partner,"this is the partner");
 
   useEffect(() => {
     fetchPartnerData(partnerId);

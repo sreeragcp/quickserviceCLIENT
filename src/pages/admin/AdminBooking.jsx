@@ -2,6 +2,7 @@ import React,{useEffect, useState} from 'react'
 import AdminNavBar from '../../components/admin/AdminNavBar'
 import { functionFetchBookingDetails } from '../../services/Apis'
 import { functionFetchDetails } from '../../services/Apis'
+import moment from 'moment';
 
 
 
@@ -141,12 +142,12 @@ const AdminBooking = () => {
               <div className="ml-5">
                 <div className="">
                   <p className="font-medium text-gray-500 dark:text-gray-400">
-                    {obj?._id}
+                    {obj?.booking_id}
                   </p>
                 </div>
                 <div className="mt-3">
                   <p className="font-medium text-gray-500 dark:text-gray-400">
-                    {obj?.bookingDate}
+                    { moment(obj.bookingDate).format("MMMM D, YYYY")}
                   </p>
                 </div>
                 <div className="mt-3">

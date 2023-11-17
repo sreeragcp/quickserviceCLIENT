@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../slices/authSlice";
 
 const UserNavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -7,6 +9,14 @@ const UserNavBar = () => {
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  const dispatch = useDispatch()
+
+  const token = useSelector((state) => state.tocken);
+
+  const handleLogout = async()=>{
+    dispatch(logout());
+  }
 
   return (
     <nav className="relative bg-white shadow dark:bg-gray-800">
@@ -68,35 +78,63 @@ const UserNavBar = () => {
           <div
             className={`absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white dark:bg-gray-800 lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center ${
               isOpen
-                ? 'translate-x-0 opacity-100'
-                : 'opacity-0 -translate-x-full'
+                ? "translate-x-0 opacity-100"
+                : "opacity-0 -translate-x-full"
             }`}
           >
             <div className="flex flex-col -mx-6 lg:flex-row lg:items-center lg:mx-8">
-            <NavLink
+              <NavLink
                 to="/"
-                className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                className={
+                  location.pathname === "/"
+                    ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+                    : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+                }
               >
                 Home
               </NavLink>
               <NavLink
                 to="/userBooking"
-                className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                className={
+                  location.pathname === "/userBooking"
+                    ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+                    : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+                }
               >
                 Bookings
               </NavLink>
               <NavLink
                 to="/profile"
-                className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                className={
+                  location.pathname === "/profile"
+                    ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+                    : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+                }
               >
                 Profile
               </NavLink>
+             {token?
               <NavLink
-                to="/signin"
-                className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                Sign In
-              </NavLink>
+             onClick={handleLogout}
+              // className={
+              //   location.pathname === "/signin"
+              //     ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+              //     : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+              // }
+            >
+              Sign Out
+            </NavLink>
+            :
+            <NavLink
+            to="/signin"
+            className={
+              location.pathname === "/signin"
+                ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+                : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+            }
+          >
+            Sign In
+          </NavLink>}
             </div>
 
             <div className="flex items-center mt-4 lg:mt-0">
@@ -126,4 +164,3 @@ const UserNavBar = () => {
 };
 
 export default UserNavBar;
-

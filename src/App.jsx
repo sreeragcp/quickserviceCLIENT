@@ -27,6 +27,7 @@ import UserBooking from './pages/user/UserBooking'
 import AdminBooking from './pages/admin/AdminBooking'
 import PartnerOrderManage from './pages/partner/PartnerOrderManage'
 import BookingCompletion from './pages/user/BookingCompletion'
+import NotFound from './pages/user/NotFound'
 
 
 function App() {
@@ -35,7 +36,7 @@ function App() {
   return (
    <>
    <Routes>
-
+   
     <Route path='/admin' element={<AdminDashBoard/>}/>
     <Route path='/admin/signin' element={<AdminLogin/>}/>
     <Route path='/admin/location'element={<AdminLocation/>}/>
@@ -66,10 +67,9 @@ function App() {
       <Route path='/newPassword' element={<UserNewPassword/>}/>
       <Route path='/userBooking' element={<UserBooking/>}/>
       <Route path='/bookingCompletion' element={<BookingCompletion/>}/>
-
+      <Route path='*' element={<NotFound/>} />
 
       {/* <Route path=''element={<UserPrivateRoute/>}/> */}
-
    </Routes>
    </>
   )

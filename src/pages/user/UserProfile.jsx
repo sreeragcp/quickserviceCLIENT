@@ -4,6 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { userProfileFunction } from "../../services/Apis";
 import { profileEditFunction } from "../../services/Apis";
+import UserFooter from "../../components/user/UserFooter";
 
 const UserProfile = () => {
   const [resData ,setResData] =useState(false)
@@ -13,7 +14,8 @@ const UserProfile = () => {
   const [userData, setUserData] = useState([]);
   const [fieldBeingEdited, setFieldBeingEdited] = useState(null);
 
-  const user = useSelector((state) => state.user.userData);
+  const user = useSelector((state) => state.tocken.userData);
+  const tocken = useSelector((state)=>state.tocken.tocken)
   const userId = user._id;
 
   const closeModal = () => {
@@ -39,7 +41,7 @@ const UserProfile = () => {
       } else if (fieldBeingEdited === "mobile") {
         data.mobile = mobile;
       }
-      const res = await profileEditFunction(userId, data);
+      const res = await profileEditFunction(userId, data,tocken);
       if(res.data.message==="User updated successfully"){
                  setResData(true)
       }
@@ -50,7 +52,7 @@ const UserProfile = () => {
 
   const fetchUser = async () => {
     try {
-      const res = await userProfileFunction(userId);
+      const res = await userProfileFunction(userId,tocken);
 
       if (res.data) {
         setUserData(res.data);
@@ -217,6 +219,10 @@ const UserProfile = () => {
           </div>
         </div>
       </dialog>
+      <div className="mt-24">
+      <UserFooter/>
+      </div>
+      
     </>
   );
 };

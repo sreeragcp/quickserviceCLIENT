@@ -1,5 +1,6 @@
 import React from 'react'
 import UserNavBar from '../../components/user/UserNavBar'
+import { NavLink } from 'react-router-dom'
 
 const BookingCompletion = () => {
   return (
@@ -27,8 +28,9 @@ const BookingCompletion = () => {
           <div className="text-center">
             <h2 className="text-4xl text-black">Thank you!</h2>
             <p className="text-xl mb-5">Your Booking successfully completed.</p>
+            <NavLink to="/">
             <a href="shop.html" className="btn btn-sm btn-outline-black">Back to Home</a>
-
+            </NavLink>
           </div>
          
         </div>

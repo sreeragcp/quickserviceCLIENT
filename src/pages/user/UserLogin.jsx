@@ -10,6 +10,7 @@ import { userSigninValidation } from "../../validations/UserValidation";
 import { userForgotPasswordMail } from "../../validations/UserValidation";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import UserNavBar from "../../components/user/UserNavBar";
 
 const UserLogin = () => {
   const [email, setEmail] = useState("");
@@ -32,7 +33,7 @@ const UserLogin = () => {
 
   const [login, { isLoading }] = useLoginMutation();
 
-  const { tocken } = useSelector((state) => state.user);
+  const tocken  = useSelector((state) => state.user);
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -45,9 +46,10 @@ const UserLogin = () => {
         };
 
         const res = await login(userDatas).unwrap();
-        const { token, userData } = res;
+        const { tocken,userData} = res;
+        console.log(res,"this is the response");
 
-        dispatch(setCredentials({ token, userData }));
+        dispatch(setCredentials({ tocken,userData}));
         console.log(res.userData._id, "this is the response");
         if (res.tocken) {
           const user = JSON.stringify(res.userData._id);
@@ -95,6 +97,7 @@ const UserLogin = () => {
 
   return (
     <>
+    <UserNavBar/>
       <Toaster position="top-right" reverseOrder={false} />
       {forget ? (
         <div className="flex justify-center items-center h-full">

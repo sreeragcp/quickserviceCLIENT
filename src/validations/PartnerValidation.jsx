@@ -12,7 +12,20 @@ export const partnerSignupValidation = yup.object().shape({
     liscense: yup.mixed().required("Please upload your Liscense"),
     insurance: yup.mixed().required("Please upload your Insurance"),
     rc: yup.mixed().required("Please upload your rc"),
+    vehicle: yup.string().required('Vehicle type is required'),
     state: yup.string().required("Please Enter Your State"),
     city: yup.string().required("Please Enter Your City"),
     pin: yup.string().required("Please Enter Your Pin")
 })
+
+export const userNewPasswordValidation = yup.object().shape({
+    password: yup.string().min(3).max(7).required("Please Enter Password"),
+    confirmPassword:yup.string().oneOf([yup.ref("password")],"Password Not Matched").required("Please Confirm Password")
+})
+
+export const partnerSigninValidation = yup.object().shape({
+    email:yup.string().email("Please Enter Valid email").required("Please Enter Email"),
+    password: yup.string().min(3).max(7).required("Please Enter Password"),
+})
+
+

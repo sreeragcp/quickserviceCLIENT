@@ -3,14 +3,16 @@ import AdminNavBar from "../../components/admin/AdminNavBar";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { verifyPartnerFunction } from "../../services/Apis";
+import { functionFetchPartner } from "../../services/Apis";
 
 const AdminPartnerList = () => {
   const [partnersData, setPartnersData] = useState([]);
-  const [verify,setVerify] = useState(false)
+  const [verify, setVerify] = useState(false);
 
+  const [data,setData] = useState([])
   const fetchPartners = async () => {
     try {
-      const res = await axios.get("http://localhost:4002/admin/partnersList")
+      const res = await axios.get("http://localhost:4002/admin/partnersList");
 
       if (res.data) {
         setPartnersData(res.data);
@@ -22,24 +24,40 @@ const AdminPartnerList = () => {
     }
   };
 
+  const handleDetailsClick = async(id)=>{
+    console.log("inside the handle click");
+    try {
+      const response= await functionFetchPartner(id)
+      const result = response.data
+      console.log(result,"this is the result");
+      if(result){
+        setData(result)
+      }
+      
+    } catch (error) {
+      
+    }
+  }
+
   useEffect(() => {
     fetchPartners();
+    
   }, []);
 
   const userVerify = async (partnerId) => {
     console.log("inside the userVerify");
-    console.log(partnerId,"this is the partnerid");
+    console.log(partnerId, "this is the partnerid");
     try {
-      const res = await verifyPartnerFunction({partnerId});
-      if(res.data){
-            setVerify(true)
+      const res = await verifyPartnerFunction({ partnerId });
+      if (res.data) {
+        setVerify(true);
       }
     } catch (error) {
       console.log(error.message);
     }
   };
 
-
+  console.log(data, "this is the partnerdata");
   return (
     <>
       <AdminNavBar />
@@ -85,9 +103,11 @@ const AdminPartnerList = () => {
                 <th>
                   <button
                     className="btn btn-ghost btn-xs"
-                    onClick={() =>
-                      document.getElementById("my_modal_1").showModal()
-                    }
+                    onClick={() => {
+
+                      document.getElementById("my_modal_1").showModal();
+                      handleDetailsClick(obj?._id); // Replace userId with the actual id of the user
+                    }}
                   >
                     details
                   </button>
@@ -97,7 +117,7 @@ const AdminPartnerList = () => {
           </tbody>
         </table>
       </div>
-      {partnersData.map((obj) => (
+     
         <dialog id="my_modal_1" className="modal">
           <div className="modal-box enlarged">
             <div className="avatar ml-44">
@@ -107,9 +127,9 @@ const AdminPartnerList = () => {
             </div>
             <button
               className="btn btn-wide ml-24"
-              onClick={()=>userVerify(obj?._id)}
+              onClick={() => userVerify(data._id)}
             >
-             {verify?"verified":"verify"}
+              {verify ? "verified" : "verify"}
             </button>
             <div className="flex ml-1 mt-7">
               <div>
@@ -152,37 +172,37 @@ const AdminPartnerList = () => {
               <div className="ml-5">
                 <div className="">
                   <p className="font-medium text-gray-500 dark:text-gray-400">
-                    {obj?.name}
+                    {data.name}
                   </p>
                 </div>
                 <div className="mt-3">
                   <p className="font-medium text-gray-500 dark:text-gray-400">
-                    {obj?.email}
+                    {data.email}
                   </p>
                 </div>
                 <div className="mt-3">
                   <p className="font-medium text-gray-500 dark:text-gray-400">
-                    {obj?.mobile}
+                    {data.mobile}
                   </p>
                 </div>
                 <div className="mt-3">
                   <p className="font-medium text-gray-500 dark:text-gray-400">
-                    {obj?.state}
+                    {data.state}
                   </p>
                 </div>
                 <div className="mt-3">
                   <p className="font-medium text-gray-500 dark:text-gray-400">
-                    {obj?.city}
+                    {data.city}
                   </p>
                 </div>
                 <div className="mt-3">
                   <p className="font-medium text-gray-500 dark:text-gray-400">
-                    {obj?.pin}
+                    {data.pin}
                   </p>
                 </div>
                 <div className="mt-3">
                   <p className="font-medium text-gray-500 dark:text-gray-400">
-                    {obj?.vehicle}
+                    {data.vehicle}
                   </p>
                 </div>
               </div>
@@ -191,14 +211,14 @@ const AdminPartnerList = () => {
               <div className="w-96 mt-7 h-32 rounded-md shadow-md border">
                 <img
                   className="h-28 rounded-md"
-                  src={obj?.aadhar}
+                  src={data.aadhar}
                   alt="adhaar"
                 />
               </div>
               <div className="w-96 mt-7 ml-9 h-32 rounded-md shadow-md border">
                 <img
                   className="h-28 rounded-md"
-                  src={obj?.liscense}
+                  src={data.liscense}
                   alt="liscense"
                 />
               </div>
@@ -207,14 +227,14 @@ const AdminPartnerList = () => {
               <div className="w-96 mt-7 h-32 rounded-md shadow-md">
                 <img
                   className="h-28 rounded-md"
-                  src={obj?.insurance}
+                  src={data.insurance}
                   alt="insurance"
                 />
               </div>
               <div className="w-96 mt-7 ml-9 h-32 rounded-md shadow-md">
                 <img
                   className="h-28 rounded-md"
-                  src={obj?.rcFile}
+                  src={data.rcFile}
                   alt="rcFile"
                 />
               </div>
@@ -226,7 +246,7 @@ const AdminPartnerList = () => {
             </div>
           </div>
         </dialog>
-      ))}
+   
     </>
   );
 };
