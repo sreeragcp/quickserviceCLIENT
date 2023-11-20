@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch,} from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { useLoginMutation } from "../../slices/userApiSlice";
@@ -33,8 +33,6 @@ const UserLogin = () => {
 
   const [login, { isLoading }] = useLoginMutation();
 
-  const tocken  = useSelector((state) => state.user);
-
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: userSigninValidation,
@@ -47,10 +45,8 @@ const UserLogin = () => {
 
         const res = await login(userDatas).unwrap();
         const { tocken,userData} = res;
-        console.log(res,"this is the response");
 
         dispatch(setCredentials({ tocken,userData}));
-        console.log(res.userData._id, "this is the response");
         if (res.tocken) {
           const user = JSON.stringify(res.userData._id);
           localStorage.setItem("userId", user);

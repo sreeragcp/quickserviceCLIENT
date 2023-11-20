@@ -13,9 +13,8 @@ const UserHome = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   
-  const tocken  = useSelector((state) => state.tocken.tocken);
+  // const tocken  = useSelector((state) => state.tocken.tocken);
 
-  console.log(tocken,"this is theh d token");
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -45,7 +44,7 @@ const UserHome = () => {
       'Authorization': `Bearer ${tocken}`,
       'Content-Type': 'application/json',
     };
-    const vehicleData = await axios.get("https://quickservice.website/vehicleList",{headers});
+    const vehicleData = await axios.get("https://quickservice.website/vehicleList");
 
     if (vehicleData) {
       setVehicleData(vehicleData.data);
@@ -57,7 +56,7 @@ const UserHome = () => {
       'Authorization': `Bearer ${tocken}`,
       'Content-Type': 'application/json',
     };
-    const res = await axios.get("https://quickservice.website/cityList",{headers});
+    const res = await axios.get("https://quickservice.website/cityList");
     if (res.data) {
       setCityList(res.data);
     } else if (res.data.message === "failed") {
