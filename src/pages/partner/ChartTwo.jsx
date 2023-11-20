@@ -1,20 +1,18 @@
 import React, { useState, useEffect,useRef } from 'react'
 import Chart from 'chart.js/auto';
-// import { BarChart } from '@mui/x-charts/BarChart';
-// import { PieChart } from '@mui/x-charts/PieChart';
-// import { LineChart } from '@mui/x-charts/LineChart';
-// import { Listbox } from '@headlessui/react';
 import PartnerNavBar from '../../components/partner/PartnerNavBar';
 import { functionPerdayEarnings } from '../../services/Apis';
+import { useSelector } from "react-redux";
 
 const ChartTwo = () => {
   
-  
+  const tocken = useSelector((state)=>state.tocken.tocken)
+
     const [bookingCount,setBookingCount]= useState([])
     const [bookingDate,setBookingDate]= useState([])
   
     async function getGraph(){
-      const data = await functionPerdayEarnings()
+      const data = await functionPerdayEarnings(tocken)
     
       const result = data.data
   
@@ -23,10 +21,8 @@ const ChartTwo = () => {
       result?.bookings.map((e)=>setBookingCount([...bookingCount,e.totalcount]))
       
     }
-  console.log(bookingCount,bookingDate,"booking");
   
     useEffect(()=>{
-      console.log("hhhhhhhhhhhhhhhh");
       getGraph()
      
     },[])

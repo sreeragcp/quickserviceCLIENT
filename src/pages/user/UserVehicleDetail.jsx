@@ -17,7 +17,7 @@ import { functionCouponApply } from "../../services/Apis";
 const UserVehicleDetail = () => {
   const [Razorpay] = useRazorpay();
   let amount;
-  const socket = io("http://localhost:4002");
+  const socket = io("https://quickservice.website");
 
   const token = useSelector((state) => state.tocken);
   const tocken = useSelector((state)=>state.tocken.tocken)
@@ -48,7 +48,7 @@ const UserVehicleDetail = () => {
   const googleApiKey = import.meta.env.VITE_GOOGLE_MAP_API_KEY;
 
   // useEffect(() => {
-  //   const socket = new io.connect("http://localhost:4002");
+  //   const socket = new io.connect("https://quickservice.website");
   //   setSocket(socket);
   // }, []);
 

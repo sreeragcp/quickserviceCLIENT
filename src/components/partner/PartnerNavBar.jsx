@@ -14,7 +14,7 @@ const PartnerNavBar = () => {
 
   const dispatch = useDispatch()
   
-  const partnerData = useSelector((state)=>state.partnerData) 
+  const partnerData = useSelector((state)=>state.tocken.partnerData) 
 
   const handleLogout = async()=>{
     dispatch(logout());

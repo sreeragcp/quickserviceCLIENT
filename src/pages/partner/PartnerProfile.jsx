@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import PartnerNavBar from "../../components/partner/PartnerNavBar";
 import { fetchPartnerEditFunction } from "../../services/Apis";
 import { functionFetchPartnerData } from "../../services/Apis";
+import { useSelector } from "react-redux";
 
 const PartnerProfile = () => {
   const [name, setName] = useState("");
@@ -10,13 +11,14 @@ const PartnerProfile = () => {
   const [data, setData] = useState([]);
 
   const [partner, setPartner] = useState([]);
-  const Data = localStorage.getItem("partnerData");
-  const partnerData = JSON.parse(Data);
+  const partnerData = useSelector((state)=>state.tocken.partnerData)
   const partnerId = partnerData._id;
+
+  const tocken = useSelector((state)=>state.tocken.tocken)
 
   const fetchPartnerData = async (partnerId) => {
     try {
-      const res = await functionFetchPartnerData(partnerId);
+      const res = await functionFetchPartnerData(partnerId,tocken);
       if (res.data) {
         setPartner(res.data);
       }
@@ -40,7 +42,7 @@ const PartnerProfile = () => {
     closeModal();
 
     try {
-      const partnerData = await fetchPartnerEditFunction(partnerId, partner);
+      const partnerData = await fetchPartnerEditFunction(partnerId, partner,tocken);
       if (partnerData) {
         setData(partnerData);
       }

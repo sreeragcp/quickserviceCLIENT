@@ -16,7 +16,8 @@ import { FaComments } from "react-icons/fa";
 
 const PartnerOrderManage = () => {
   const googleApiKey = import.meta.env.VITE_GOOGLE_MAP_API_KEY;
-  const partnerData = useSelector((state) => state.tocken.partner);
+  const partnerData = useSelector((state) => state.tocken.partnerData);
+  const tocken = useSelector((state)=>state.tocken.tocken)
   const partnerEmail = partnerData.email;
 
   const [pickupPoint, setPickupPoint] = useState(null);
@@ -37,7 +38,7 @@ const PartnerOrderManage = () => {
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [selectedBookingDetails, setSelectedBookingDetails] = useState([]);
 
-  const socket = io("http://localhost:4002");
+  const socket = io("https://quickservice.website");
 
   useEffect(() => {
     socket.emit("join_room", partnerEmail);
@@ -58,14 +59,14 @@ const PartnerOrderManage = () => {
   const submitAccept = async () => {
     try {
       const userId = message.userData._id;
-      const res = await functionRequestAccept(userId);
+      const res = await functionRequestAccept(userId,tocken);
     } catch (error) {}
   };
 
   const submitReject = async () => {
     try {
       const userId = message.userData._id;
-      const res = await functionRequestReject(userId);
+      const res = await functionRequestReject(userId,tocken);
     } catch (error) {}
   };
 
@@ -148,9 +149,12 @@ const PartnerOrderManage = () => {
   };
 
   const getBookingData = async () => {
+    console.log("inside the booking data");
     try {
       const partnerId = partnerData._id;
-      const response = await functionCurrentBooking(partnerId);
+      console.log(partnerId,"this is the partnerId");
+      const response = await functionCurrentBooking(partnerId,tocken);
+      console.log(response,"thisi is the response");
       if (response) {
         setCurrentBookingData(response.data);
       }
@@ -163,7 +167,7 @@ const PartnerOrderManage = () => {
     try {
       const partnerId = partnerData._id;
       const res = await axios.patch(
-        `http://localhost:4002/partner/updateBooking/${partnerId}`,
+        `https://quickservice.website/partner/updateBooking/${partnerId}`,
         { status }
       );
       setResponse(res.data);

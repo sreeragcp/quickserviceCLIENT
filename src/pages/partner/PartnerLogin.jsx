@@ -42,14 +42,15 @@ const PartnerLogin = () => {
           password: values.password
         }
 
-        const res = await axios.post("http://localhost:4002/partner/login", data);
-        const partner = res.data.partnerData;
-        console.log(partner,"this is the partner");
-        const {partnerData} = res
+        const res = await axios.post("https://quickservice.website/partner/login", data);
+        const partnerData = res.data.partnerData;
+        const tocken = res.data.tocken
+        const partner={
+              tocken:tocken,
+              partnerData:partnerData
+        }
 
-        console.log(res,"this is the rwponse");
-
-        dispatch(setCredentials({partner}))
+        dispatch(setCredentials(partner))
 
         const partnerDataJSON = JSON.stringify(partner);
         const partnerId = JSON.stringify(partner._id);
@@ -65,30 +66,6 @@ const PartnerLogin = () => {
     }
     })
 
-
-  // const submitHandler = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const data = { email, password };
-  //     const res = await axios.post("http://localhost:4002/partner/login", data);
-  //     const partner = res.data.partnerData;
-  //     const {partnerData} = res
-
-  //     dispatch(setCredentials({partnerData}))
-
-  //     const partnerDataJSON = JSON.stringify(partner);
-  //     const partnerId = JSON.stringify(partner._id);
-  //     localStorage.setItem('partnerId',partnerId)
-  //     localStorage.setItem("partnerData", partnerDataJSON);
-  
-
-  //     if (res.data.message === "success") {
-  //       navigate("/partner");
-  //     }
-  //   } catch (err) {
-  //     toast.error(err?.data?.message || err.error);
-  //   }
-  // };
   return (
     <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-12 bg-cover">
       <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl relative top-4">

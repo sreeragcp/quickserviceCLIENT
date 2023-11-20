@@ -2,17 +2,20 @@ import React, { useState, useEffect,useRef } from 'react'
 import Chart from 'chart.js/auto';
 // import { functionPerdayEarnings } from '../../services/Apis';
 import { getTotalBookingDetails } from '../../services/Apis';
+import {useSelector } from "react-redux";
 
 
 
 
 const AdminChart = () => {
+
+  const  tocken  = useSelector((state) => state.tocken.tocken);
   const [monthlyUserData, setMonthlyUserData] = useState([]);
     // const [monthlyData, setMonthlyData] = useState([]);
 
     const getTotalDetail = async()=>{
         try {
-            const details = await getTotalBookingDetails()
+            const details = await getTotalBookingDetails(tocken)
             setMonthlyUserData([details.data]);
         } catch (error) {
             

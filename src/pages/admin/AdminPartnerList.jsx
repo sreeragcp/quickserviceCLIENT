@@ -4,15 +4,22 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { verifyPartnerFunction } from "../../services/Apis";
 import { functionFetchPartner } from "../../services/Apis";
+import { useSelector } from "react-redux";
 
 const AdminPartnerList = () => {
+
+  const tocken = useSelector((state)=>state.tocken.tocken)
   const [partnersData, setPartnersData] = useState([]);
   const [verify, setVerify] = useState(false);
 
   const [data,setData] = useState([])
   const fetchPartners = async () => {
     try {
-      const res = await axios.get("http://localhost:4002/admin/partnersList");
+      const headers = {
+        'Authorization': `Bearer ${tocken}`,
+        'Content-Type': 'application/json',
+      };
+      const res = await axios.get("https://quickservice.website/admin/partnersList",{headers});
 
       if (res.data) {
         setPartnersData(res.data);
@@ -25,9 +32,8 @@ const AdminPartnerList = () => {
   };
 
   const handleDetailsClick = async(id)=>{
-    console.log("inside the handle click");
     try {
-      const response= await functionFetchPartner(id)
+      const response= await functionFetchPartner(id,tocken)
       const result = response.data
       console.log(result,"this is the result");
       if(result){
@@ -35,7 +41,7 @@ const AdminPartnerList = () => {
       }
       
     } catch (error) {
-      
+      console.log(error.message);
     }
   }
 

@@ -5,8 +5,12 @@ import AdminNavBar from '../../components/admin/AdminNavBar'
 import AdminChart from './AdminChart'
 import AdminChatOne from './AdminChatOne'
 import { functionGetAdminMonthData } from '../../services/Apis';
+import {useSelector } from "react-redux";
 
 const AdminDashBoard = () => {
+
+  const  tocken  = useSelector((state) => state.tocken.tocken);
+
   const [totalAmount,setTotalAmount] = useState()
   const [totalBooking,setTotalBooking] = useState()
   const [monthlyAmount,setMonthlyAmount] = useState()
@@ -14,7 +18,7 @@ const AdminDashBoard = () => {
 
 
   const adminMonthlyData = async()=>{
-    const adminData = await functionGetAdminMonthData()
+    const adminData = await functionGetAdminMonthData(tocken)
     if(adminData){
       setTotalAmount(adminData.data.result.totalAmount)
       setTotalBooking(adminData.data.result.totalBookings)

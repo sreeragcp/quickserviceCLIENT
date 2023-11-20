@@ -45,7 +45,7 @@ const UserHome = () => {
       'Authorization': `Bearer ${tocken}`,
       'Content-Type': 'application/json',
     };
-    const vehicleData = await axios.get("http://localhost:4002/vehicleList",{headers});
+    const vehicleData = await axios.get("https://quickservice.website/vehicleList",{headers});
 
     if (vehicleData) {
       setVehicleData(vehicleData.data);
@@ -57,7 +57,7 @@ const UserHome = () => {
       'Authorization': `Bearer ${tocken}`,
       'Content-Type': 'application/json',
     };
-    const res = await axios.get("http://localhost:4002/cityList",{headers});
+    const res = await axios.get("https://quickservice.website/cityList",{headers});
     if (res.data) {
       setCityList(res.data);
     } else if (res.data.message === "failed") {

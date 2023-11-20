@@ -1,13 +1,12 @@
 import React, { useState, useEffect,useRef } from 'react'
 import Chart from 'chart.js/auto';
-// import { BarChart } from '@mui/x-charts/BarChart';
-// import { PieChart } from '@mui/x-charts/PieChart';
-// import { LineChart } from '@mui/x-charts/LineChart';
-// import { Listbox } from '@headlessui/react';
 import PartnerNavBar from '../../components/partner/PartnerNavBar';
 import { functionPerdayEarnings } from '../../services/Apis';
+import { useSelector } from "react-redux";
 
 const chart = () => {
+
+  const tocken = useSelector((state)=>state.tocken.tocken)
 
   const [earningDate,setEarningsDate]=useState([])
   const [earningsAmount,setEarningsAmount] = useState([])
@@ -16,11 +15,9 @@ const chart = () => {
 //   const [bookingDate,setBookingDate]= useState([])
 
   async function getGraph(){
-    const data = await functionPerdayEarnings()
+    const data = await functionPerdayEarnings(tocken)
   
     const result = data.data
-
-    console.log(result,"<<<<<<<<<<<<<<<<,,,,");
     result?.data.map((e)=>setEarningsDate([...earningDate,e.date]))
     result?.data.map((e)=>setEarningsAmount([...earningsAmount,e.totalAmount]))
     // result?.bookings.map((e)=>setBookingDate([...bookingDate,e.date]))
@@ -30,7 +27,6 @@ const chart = () => {
 
 
   useEffect(()=>{
-    console.log("hhhhhhhhhhhhhhhh");
     getGraph()
    
   },[])

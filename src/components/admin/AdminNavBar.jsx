@@ -12,7 +12,7 @@ const AdminNavBar = () => {
 
   const dispatch = useDispatch()
   
-  const adminData = useSelector((state)=>state.adminData) 
+  const adminData = useSelector((state)=>state.tocken.tocken) 
 
   const handleLogout = async()=>{
     dispatch(logout());

@@ -1,6 +1,6 @@
 // import { apiSlice } from "./apiSlice";
 
-// const ADMIN_URL = "http://localhost:4002/admin";
+// const ADMIN_URL = "https://quickservice.website/admin";
 
 // export const adminApiSlice = apiSlice.injectEndpoints({
     

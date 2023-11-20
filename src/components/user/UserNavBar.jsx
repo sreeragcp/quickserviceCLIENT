@@ -12,7 +12,7 @@ const UserNavBar = () => {
 
   const dispatch = useDispatch()
 
-  const token = useSelector((state) => state.tocken);
+  const token = useSelector((state) => state.tocken.tocken);
 
   const handleLogout = async()=>{
     dispatch(logout());

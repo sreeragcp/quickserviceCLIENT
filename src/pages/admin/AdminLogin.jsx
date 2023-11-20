@@ -13,18 +13,19 @@ const AdminLogin = () => {
 
   const dispatch = useDispatch()
 
-  const  adminData  = useSelector((state) => state.adminData);
+  const  adminData  = useSelector((state) => state.tocken.admin);
 
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-
         const data = {email,password}
-        const res = await axios.post("http://localhost:4002/admin/login",data)
-        const adminData = res.data.admin
-        dispatch(setCredentials({adminData}))
+        const res = await axios.post("https://quickservice.website/admin/login",data)
+        const admin = res.data.admin
+        const tocken = res.data.tocken
+        const adminData ={admin,tocken}
+        dispatch(setCredentials(adminData))
       if (res.data.message === "success") {
           navigate("/admin");
         }

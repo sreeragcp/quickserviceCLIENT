@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import AdminNavBar from "../../components/admin/AdminNavBar";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import {useSelector } from "react-redux";
 
 const AdminVehicle = () => {
+
+  const  tocken  = useSelector((state) => state.tocken.tocken);
   const [currentVehicle, setCurrentVehicle] = useState([]);
   const [vehicleList, setVehicleList] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -36,8 +39,11 @@ const AdminVehicle = () => {
     setModalVisible(!isModalVisible);
     try {
       const data = { vehicle, image, minWeight, maxWeight,pricePerKm };
-
-      const res = await axios.post("http://localhost:4002/admin/vehicle", data);
+      const headers = {
+        'Authorization': `Bearer ${tocken}`,
+        'Content-Type': 'application/json',
+      };
+      const res = await axios.post("https://quickservice.website/admin/vehicle",data,{headers});
       setCurrentVehicle(res.data);
     } catch (error) {
       toast.error(error.message);
@@ -46,10 +52,13 @@ const AdminVehicle = () => {
 
   const fetchVehicleList = async () => {
     try {
+      const headers = {
+        'Authorization': `Bearer ${tocken}`,
+        'Content-Type': 'application/json',
+      };
       const response = await axios.get(
-        "http://localhost:4002/admin/vehicleList"
+        "https://quickservice.website/admin/vehicleList",{headers}
       );
-      console.log(response, "this is the response ");
       if (response.data) {
         setVehicleList(response.data);
       } else {

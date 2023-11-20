@@ -3,18 +3,20 @@ import AdminNavBar from '../../components/admin/AdminNavBar'
 import { functionFetchBookingDetails } from '../../services/Apis'
 import { functionFetchDetails } from '../../services/Apis'
 import moment from 'moment';
+import {useSelector } from "react-redux";
 
 
 
 
 const AdminBooking = () => {
 
+  const  tocken  = useSelector((state) => state.tocken.tocken);
     const [bookData,setBookData] = useState([])
     const [data,setData] = useState([])
 
     const detailsBooking = async()=>{
         try {
-            const res = await functionFetchBookingDetails()
+            const res = await functionFetchBookingDetails(tocken)
             if(res.data){
                 setBookData(res.data)
             }
@@ -34,7 +36,7 @@ const AdminBooking = () => {
     const handleButtonClick = async(id)=> {
         const modal = document.getElementById("my_modal_1");
         modal.showModal();
-        const res = await functionFetchDetails(id)
+        const res = await functionFetchDetails(id,tocken)
         console.log(res,"this is the res");
         setData([res.data])
       }

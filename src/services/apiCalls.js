@@ -25,12 +25,13 @@ export const commonRequest = async(method, url, body, header,tocken)=>{
 }
 
 
-export const commonRequestAdmin = async(method, url, body, header)=>{
+export const commonRequestAdmin = async(method, url, body, header,tocken)=>{
     const config = {
         method,
         url,
-        headers:header?header 
+        headers:header?header
         :{
+            'Authorization': `Bearer ${tocken}`,
             "Content-Type":"application/json"
         },
         data:body
@@ -44,12 +45,13 @@ export const commonRequestAdmin = async(method, url, body, header)=>{
     })
 }
 
-export const commonRequestPartner = async(method, url, body, header)=>{
+export const commonRequestPartner = async(method, url, body, header,tocken)=>{
     const config = {
         method,
         url,
         headers:header?header
         :{
+            'Authorization': `Bearer ${tocken}`,
             "Content-Type":"application/json"
         },
         data:body

@@ -15,8 +15,8 @@ export const profileEditFunction = async(userId,data,tocken)=>{
     return await commonRequest("PATCH",`${BACKEND_URL}/profileEdit/${userId}`,data,null,tocken)
 }
 
-export const fetchPartnerEditFunction = async(partnerId,data)=>{
-    return await commonRequest("PATCH",`${BACKEND_URL}/profileEdit/${partnerId}`,data)
+export const fetchPartnerEditFunction = async(partnerId,data,tocken)=>{
+    return await commonRequest("PATCH",`${BACKEND_URL}/profileEdit/${partnerId}`,data,null,tocke)
 }
 
 export const forgetUserPasswordFunction = async(data)=>{
@@ -39,40 +39,39 @@ export const fetchVehicleDetails = async(vehicleId,tocken)=>{
     return await commonRequest("GET",`${BACKEND_URL}/vehicleDetail/${vehicleId}`,null,null,tocken)
 }
 
-export const functionAddCoupon = async(data)=>{
-    return await commonRequestAdmin("POST",`${BACKEND_URL}/admin/coupon`,data)
+export const functionAddCoupon = async(data,tocken)=>{
+    return await commonRequestAdmin("POST",`${BACKEND_URL}/admin/coupon`,data,null,tocken)
 }
 
-export const functionFecthCoupon = async()=>{
-    return await commonRequestAdmin("GET",`${BACKEND_URL}/admin/couponList`)
+export const functionFecthCoupon = async(tocken)=>{
+    return await commonRequestAdmin("GET",`${BACKEND_URL}/admin/couponList`,null,null,tocken)
 }
 
 export const fetchCouponData = async(tocken)=>{
     return await commonRequest("GET",`${BACKEND_URL}/coupon`,null,null,tocken)
 }
 
-export const functionFetchPartnerData = async(partnerId)=>{
-    console.log(partnerId,"this is the partnerId");
-    return await commonRequestPartner("GET",`${BACKEND_URL}/partner/partnerData/${partnerId}`)
+export const functionFetchPartnerData = async(partnerId,tocken)=>{
+    return await commonRequestPartner("GET",`${BACKEND_URL}/partner/partnerData/${partnerId}`,null,null,tocken)
 }
 
 export const functionBookingHandle = async(userId,data,tocken)=>{
     return await commonRequest("POST",`${BACKEND_URL}/handleBooking/${userId}`,data,null,tocken)
 }
-export const functionRequestAccept = async(userId)=>{
-    return await commonRequestPartner("POST",`${BACKEND_URL}/partner/accept/${userId}`)
+export const functionRequestAccept = async(userId,tocken)=>{
+    return await commonRequestPartner("POST",`${BACKEND_URL}/partner/accept/${userId}`,null,null,tocken)
 }
 
-export const functionRequestReject = async(userId)=>{
-    return await commonRequestPartner("POST",`${BACKEND_URL}/partner/reject/${userId}`)
+export const functionRequestReject = async(userId,tocken)=>{
+    return await commonRequestPartner("POST",`${BACKEND_URL}/partner/reject/${userId}`,null,null,tocken)
 }
 
 export const functionBookingCompletion = async(data,tocken)=>{
     return await commonRequest("POST",`${BACKEND_URL}/bookingCompletion`,data,null,tocken)
 }
 
-export const functionBookingDetails = async(partnerId)=>{
-    return await commonRequestPartner("GET",`${BACKEND_URL}/partner/bookingDetails/${partnerId}`)
+export const functionBookingDetails = async(partnerId,tocken)=>{
+    return await commonRequestPartner("GET",`${BACKEND_URL}/partner/bookingDetails/${partnerId}`,null,null,tocken)
 }
 
 
@@ -88,12 +87,12 @@ export const functionBookingCancel = async(bookingId,tocken)=>{
     return await commonRequest("PATCH",`${BACKEND_URL}/cancelBooking/${bookingId}`,null,null.tocken)
 }
 
-export const functionFetchBookingDetails = async()=>{
-    return await commonRequestAdmin("GET",`${BACKEND_URL}/admin/detailsBooking`)
+export const functionFetchBookingDetails = async(tocken)=>{
+    return await commonRequestAdmin("GET",`${BACKEND_URL}/admin/detailsBooking`,null,null,tocken)
 }
 
-export const functionFetchDetails = async(id)=>{
-    return await commonRequestAdmin("GET",`${BACKEND_URL}/admin/bookingDetails/${id}`)
+export const functionFetchDetails = async(id,tocken)=>{
+    return await commonRequestAdmin("GET",`${BACKEND_URL}/admin/bookingDetails/${id}`,null,null,tocken)
 }
 
 export const functionFetchDetail = async(id,tocken)=>{
@@ -108,29 +107,29 @@ export const functionVerifyOtp = async(otpValue,partnerId)=>{
     return await commonRequestPartner("POST",`${BACKEND_URL}/partner/verifyorderOtp/${partnerId}`,otpValue)
 }
 
-export const functionCurrentBooking = async(partnerId)=>{
-    return await commonRequestPartner("GET",`${BACKEND_URL}/partner/currentBooking/${partnerId}`)
+export const functionCurrentBooking = async(partnerId,tocken)=>{
+    return await commonRequestPartner("GET",`${BACKEND_URL}/partner/currentBooking/${partnerId}`,null,null,tocken)
 }
 
 export const functionCouponApply = async(data)=>{
     return await commonRequest("POST",`${BACKEND_URL}/applyCoupon`,data,null,tocken)
 }
 
-export const functionFetchPartner = async(id)=>{
-    return await commonRequestAdmin("GET",`${BACKEND_URL}/admin/fetchPartner/${id}`)
+export const functionFetchPartner = async(id,tocken)=>{
+    return await commonRequestAdmin("GET",`${BACKEND_URL}/admin/fetchPartner/${id}`,null,null,tocken)
 }
 
 
-export const functionPerdayEarnings = async()=>{
-    return await commonRequestPartner("GET",`${BACKEND_URL}/partner/graph`)
+export const functionPerdayEarnings = async(tocken)=>{
+    return await commonRequestPartner("GET",`${BACKEND_URL}/partner/graph`,null,null,tocken)
 }
 
-export const functionGetAdminMonthData = async()=>{
-    return await commonRequestAdmin("GET",`${BACKEND_URL}/admin/graph`)
+export const functionGetAdminMonthData = async(tocken)=>{
+    return await commonRequestAdmin("GET",`${BACKEND_URL}/admin/graph`,null,null,tocken)
 }
 
-export const getTotalBookingDetails = async()=>{
-    return await commonRequestAdmin("GET",`${BACKEND_URL}/admin/bookingDetails`)
+export const getTotalBookingDetails = async(tocken)=>{
+    return await commonRequestAdmin("GET",`${BACKEND_URL}/admin/bookingDetails`,null,null,tocken)
 }
 
 export const functionGetUserRegister = async()=>{

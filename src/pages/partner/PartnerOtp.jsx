@@ -21,7 +21,7 @@ const PartnerOtp = () => {
       storedPartnerData["otp"] = otpValue;
 
       const res = await axios.post(
-        "http://localhost:4002/partner/otp",
+        "https://quickservice.website/partner/otp",
         storedPartnerData
       );
 

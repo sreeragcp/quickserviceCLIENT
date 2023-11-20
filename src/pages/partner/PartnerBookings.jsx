@@ -3,16 +3,18 @@ import PartnerNavBar from "../../components/partner/PartnerNavBar";
 import { functionBookingDetails } from "../../services/Apis";
 import moment from "moment";
 import { Chart } from "chart.js";
+import { useSelector } from "react-redux";
 
 const PartnerBookings = () => {
   const [bookingDetail, setBookingDetails] = useState([]);
-  const partnerData = localStorage.getItem("partnerData");
-  const partner = JSON.parse(partnerData);
-  const partnerId = partner._id;
+  const partnerData = useSelector((state)=>state.tocken.partnerData)
+  const partnerId = partnerData._id;
+
+  const tocken = useSelector((state)=>state.tocken.tocken)
 
   const fetchData = async () => {
     try {
-      const res = await functionBookingDetails(partnerId);
+      const res = await functionBookingDetails(partnerId,tocken);
       setBookingDetails([res.data]);
     } catch (error) {
       console.log(error.message);
@@ -23,7 +25,6 @@ const PartnerBookings = () => {
     fetchData();
   }, []);
 
-  console.log(bookingDetail, "this is the detail");
 
   return (
     <>

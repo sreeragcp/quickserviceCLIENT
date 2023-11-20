@@ -75,7 +75,7 @@ const PartnerRegister = () => {
         localStorage.setItem("partnerData", JSON.stringify(partnerData));
 
         const res = await axios.post(
-          "http://localhost:4002/partner/register",
+          "https://quickservice.website/partner/register",
           partnerData
         );
         console.log(res, "respose from the register");

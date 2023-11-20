@@ -1,66 +1,57 @@
-import React,{useEffect, useState} from 'react'
-import AdminNavBar from '../../components/admin/AdminNavBar'
-import { functionAddCoupon } from '../../services/Apis';
-import { functionFecthCoupon } from '../../services/Apis';
+import React, { useEffect, useState } from "react";
+import AdminNavBar from "../../components/admin/AdminNavBar";
+import { functionAddCoupon } from "../../services/Apis";
+import { functionFecthCoupon } from "../../services/Apis";
+import { useSelector } from "react-redux";
 
 const AdminCoupon = () => {
-    const [isModalVisible, setModalVisible] = useState(false);
-    const [currentCoupon, setCurrentCoupon] = useState([])
-    const [couponList,setCouponList] = useState([])
-    const [couponCode, setCouponCode] = useState('')
-    const [discount,setDiscount] = useState('')
-    const [maxDiscount, setMaxDiscount] = useState('')
-    const [expiryDate, setExpiryDate] = useState('')
+  const tocken = useSelector((state) => state.tocken.tocken);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [currentCoupon, setCurrentCoupon] = useState([]);
+  const [couponList, setCouponList] = useState([]);
+  const [couponCode, setCouponCode] = useState("");
+  const [discount, setDiscount] = useState("");
+  const [maxDiscount, setMaxDiscount] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
 
-
-
-    
   const submitHandler = async (e) => {
     e.preventDefault();
     setModalVisible(!isModalVisible);
     try {
-      const data = { couponCode, discount, maxDiscount,expiryDate };
-
-      const res = await functionAddCoupon(data)
-
-      console.log(res.data,"this is the response");
+      const data = { couponCode, discount, maxDiscount, expiryDate };
+      const res = await functionAddCoupon(data, tocken);
       setCurrentCoupon(res.data);
     } catch (error) {
       toast.error(error.message);
     }
   };
 
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
 
+  const fetchCouponList = async () => {
+    try {
+      const response = await functionFecthCoupon(tocken);
 
-    const toggleModal = () => {
-        setModalVisible(!isModalVisible);
-      };
+      if (response.data) {
+        setCouponList(response.data);
+      } else {
+        toast.warning("No vehicle data found");
+      }
+    } catch (error) {
+      toast.error("Internal Server Error");
+    }
+  };
 
-
-      const fetchCouponList = async () => {
-        console.log("inside the couponList");
-        try {
-          const response = await functionFecthCoupon()
-
-          console.log(response, "this is the response ");
-          if (response.data) {
-            setCouponList(response.data);
-          } else {
-            toast.warning("No vehicle data found");
-          }
-        } catch (error) {
-          toast.error("Internal Server Error");
-        }
-      };
-
-      useEffect(()=>{
-        fetchCouponList()
-      },[])
+  useEffect(() => {
+    fetchCouponList();
+  }, []);
   return (
     <>
-    <AdminNavBar/>
+      <AdminNavBar />
 
-    <section className="container max-w-4xl mt-16  px-4 mx-auto">
+      <section className="container max-w-4xl mt-16  px-4 mx-auto">
         <div className="flex items-center gap-x-3"></div>
         <div className="flex flex-col mt-6">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -204,7 +195,7 @@ const AdminCoupon = () => {
                         <td className="px-4 py-4 text-sm whitespace-nowrap"></td>
                       </tr>
                     </tbody>
-                ))}  
+                  ))}
                 </table>
               </div>
             </div>
@@ -297,7 +288,7 @@ const AdminCoupon = () => {
               </svg>
             </a>
           </div>
-        )} 
+        )}
       </section>
 
       <div>
@@ -350,19 +341,7 @@ const AdminCoupon = () => {
                         onChange={(e) => setCouponCode(e.target.value)}
                       />
                     </div>
-                    {/* <div>
-                      <label
-                        htmlFor="image"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                      >
-                        Image
-                      </label>
-                      <input
-                        className="block w-full mb-5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                        id="default_size"
-                        type="file"
-                      />
-                    </div> */}
+
                     <div>
                       <label
                         htmlFor="Discount"
@@ -403,46 +382,13 @@ const AdminCoupon = () => {
                         onChange={(e) => setExpiryDate(e.target.value)}
                       />
                     </div>
-                    {/* <div className="flex justify-between">
-                      <div className="flex items-start">
-                        <div className="flex items-center h-5">
-                          <input
-                            id="remember"
-                            type="checkbox"
-                            value=""
-                            className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-                            required
-                          />
-                        </div>
-                        <label
-                          htmlFor="remember"
-                          className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                        >
-                          Remember me
-                        </label>
-                      </div>
-                      <a
-                        href="#"
-                        className="text-sm text-blue-700 hover:underline dark:text-blue-500"
-                      >
-                        Lost Password?
-                      </a>
-                    </div> */}
+
                     <button
                       onClick={submitHandler}
                       className="ml-36 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 "
                     >
                       Submit
                     </button>
-                    {/* <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-                      Not registered?{" "}
-                      <a
-                        href="#"
-                        className="text-blue-700 hover:underline dark:text-blue-500"
-                      >
-                        Create account
-                      </a>
-                    </div> */}
                   </form>
                 </div>
               </div>
@@ -451,7 +397,7 @@ const AdminCoupon = () => {
         )}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default AdminCoupon
+export default AdminCoupon;

@@ -2,14 +2,21 @@ import React, { useState,useEffect } from "react";
 import AdminNavBar from "../../components/admin/AdminNavBar";
 import axios from "axios";
 import toast from "react-hot-toast";
+import {useSelector } from "react-redux";
 
 const AdminUserList = () => {
+
+  const  tocken  = useSelector((state) => state.tocken.tocken);
 
     const [userList,setUserList] = useState([])
 
     const fetchUserList = async () => {
         try {
-          const response = await axios.get("http://localhost:4002/admin/userList");
+          const headers = {
+            'Authorization': `Bearer ${tocken}`,
+            'Content-Type': 'application/json',
+          };
+          const response = await axios.get("https://quickservice.website/admin/userList",{headers});
 
           if (response.data) {
             setUserList(response.data);

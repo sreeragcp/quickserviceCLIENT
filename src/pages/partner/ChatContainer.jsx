@@ -14,7 +14,7 @@ const styles = {
 const ChatContainer = ({ bookingId, userId, partnerId, closeChatModal }) => {
 ;
 
-  let socketio = socketIOClient("http://localhost:4002");
+  let socketio = socketIOClient("https://quickservice.website");
   // let socketio = socketIOClient("https://www.car-rentals.shop");
   const [chats, setChats] = useState([]);
   const [user, setUser] = useState(localStorage.getItem("partnerData.name"));
@@ -23,8 +23,8 @@ const ChatContainer = ({ bookingId, userId, partnerId, closeChatModal }) => {
 
   const [messageList, setMessageList] = useState([]);
 
-  const currentUserId = JSON.parse(localStorage.getItem("partnerId"));
-
+  const currentUser = JSON.parse(localStorage.getItem("partnerData"));
+ const currentUserId=currentUser._id
   const [messageTriger, setMessageTriger] = useState(new Date());
 
   useEffect(() => {

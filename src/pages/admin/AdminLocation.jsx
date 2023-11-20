@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import AdminNavBar from "../../components/admin/AdminNavBar";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import {useSelector } from "react-redux";
 
 const AdminLocation = () => {
+
+  const  tocken  = useSelector((state) => state.tocken.tocken);
 
   const [currentAdd,setCurrentAdd] = useState([])
   const [cityList, setCityList] = useState([]);
@@ -36,8 +39,11 @@ const AdminLocation = () => {
     try {
       const data = { city, image };
       localStorage.setItem("data", JSON.stringify(data));
-
-      const res = await axios.post("http://localhost:4002/admin/addCity", data);
+      const headers = {
+        'Authorization': `Bearer ${tocken}`,
+        'Content-Type': 'application/json',
+      };
+      const res = await axios.post("https://quickservice.website/admin/addCity", data,{headers});
         setCurrentAdd(res.data)
 
     } catch (err) {
@@ -47,7 +53,11 @@ const AdminLocation = () => {
 
   const fetchCity = async () => {
     try {
-      const response = await axios.get("http://localhost:4002/admin/cityList");
+      const headers = {
+        'Authorization': `Bearer ${tocken}`,
+        'Content-Type': 'application/json',
+      };
+      const response = await axios.get("https://quickservice.website/admin/cityList",{headers});
       if (response.data) {
         setCityList(response.data);
       } else if (response.data.message === "failed") {
