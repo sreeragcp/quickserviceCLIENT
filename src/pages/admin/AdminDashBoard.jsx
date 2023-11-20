@@ -1,6 +1,4 @@
 import React, { useState, useEffect,useRef } from 'react'
-// import chart from './chart';
-// import { functionPerdayEarnings } from '../../services/Apis';
 import AdminNavBar from '../../components/admin/AdminNavBar'
 import AdminChart from './AdminChart'
 import AdminChatOne from './AdminChatOne'
