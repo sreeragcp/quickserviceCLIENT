@@ -1,7 +1,5 @@
-import React, { useState, useEffect,useRef } from 'react'
-import chart from './chart';
+
 import PartnerNavBar from '../../components/partner/PartnerNavBar';
-import { functionPerdayEarnings } from '../../services/Apis';
 import ChartOne from './ChartOne';
 import ChartTwo from './ChartTwo';
 
