@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useDispatch,} from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { useLoginMutation } from "../../slices/userApiSlice";
 import toast, { Toaster } from "react-hot-toast";
-import { setCredentials } from "../../slices/authSlice";
-import { forgetUserPasswordFunction } from "../../services/Apis";
+import { setCredentials } from "../../slices/authS";
+import { forgetUserPasswordFunction } from "../../services/apis";
 import { userSigninValidation } from "../../validations/UserValidation";
 import { userForgotPasswordMail } from "../../validations/UserValidation";
 import * as yup from "yup";
@@ -44,9 +44,9 @@ const UserLogin = () => {
         };
 
         const res = await login(userDatas).unwrap();
-        const { tocken,userData} = res;
+        const { tocken, userData } = res;
 
-        dispatch(setCredentials({ tocken,userData}));
+        dispatch(setCredentials({ tocken, userData }));
         if (res.tocken) {
           const user = JSON.stringify(res.userData._id);
           localStorage.setItem("userId", user);
@@ -69,7 +69,6 @@ const UserLogin = () => {
           email: values.email,
         };
         const res = await forgetUserPasswordFunction(resetEmail);
-        console.log(res, "this is tge res");
         if (res.data.message === "success") {
           localStorage.setItem("timer", new Date());
 
@@ -84,16 +83,13 @@ const UserLogin = () => {
     },
   });
 
-
   const forgetPassword = async () => {
     setForget(true);
   };
 
- 
-
   return (
     <>
-    <UserNavBar/>
+      <UserNavBar />
       <Toaster position="top-right" reverseOrder={false} />
       {forget ? (
         <div className="flex justify-center items-center h-full">
@@ -115,7 +111,7 @@ const UserLogin = () => {
                   value={formiks.values.email}
                   className="input input-ghost w-full max-w-xs"
                 />
-                 {formiks.touched.email && formiks.errors.email && (
+                {formiks.touched.email && formiks.errors.email && (
                   <div className="text-red-500 text-sm">
                     {formiks.errors.email}
                   </div>

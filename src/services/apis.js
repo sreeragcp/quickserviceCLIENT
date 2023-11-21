@@ -16,7 +16,7 @@ export const profileEditFunction = async(userId,data,tocken)=>{
 }
 
 export const fetchPartnerEditFunction = async(partnerId,data,tocken)=>{
-    return await commonRequest("PATCH",`${BACKEND_URL}/profileEdit/${partnerId}`,data,null,tocke)
+    return await commonRequest("PATCH",`${BACKEND_URL}/profileEdit/${partnerId}`,data,null,tocken)
 }
 
 export const forgetUserPasswordFunction = async(data)=>{
