@@ -1,5 +1,5 @@
 import { apiSlice } from "./apiSlice";
-import { BACKEND_URL } from '../services/helper.js'
+import { BACKEND_URL } from '../services/Helper.js'
 
 const USER_URL = "https://quickservice.website";
 
