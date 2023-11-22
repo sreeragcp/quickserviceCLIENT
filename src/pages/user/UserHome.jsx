@@ -13,7 +13,7 @@ const UserHome = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   
-  // const tocken  = useSelector((state) => state.tocken.tocken);
+  const tocken  = useSelector((state) => state?.tocken?.tocken);
 
 
   const openModal = () => {

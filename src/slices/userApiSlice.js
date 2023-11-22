@@ -1,6 +1,4 @@
 import { apiSlice } from "./apiSlice";
-import { BACKEND_URL } from '../services/Helper.js'
-
 const USER_URL = "https://quickservice.website";
 
 export const userApiSlice = apiSlice.injectEndpoints({

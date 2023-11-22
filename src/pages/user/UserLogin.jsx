@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import { useLoginMutation } from "../../slices/userApiSlice";
 import toast, { Toaster } from "react-hot-toast";
 import { setCredentials } from "../../slices/authSlice";
-import { forgetUserPasswordFunction } from "../../services/Apis";
+// import { forgetUserPasswordFunction } from "../../services/Apis";
 import { userSigninValidation } from "../../validations/UserValidation";
 import { userForgotPasswordMail } from "../../validations/UserValidation";
 import * as yup from "yup";
@@ -68,15 +68,15 @@ const UserLogin = () => {
         const resetEmail = {
           email: values.email,
         };
-        const res = await forgetUserPasswordFunction(resetEmail);
-        if (res.data.message === "success") {
-          localStorage.setItem("timer", new Date());
+        // const res = await forgetUserPasswordFunction(resetEmail);
+        // if (res.data.message === "success") {
+        //   localStorage.setItem("timer", new Date());
 
-          toast.success("success");
-          navigate("/forgotOtp");
-        } else if (res.data.message === "Invalid Email or Password") {
-          toast.error("Invalid Email or Password");
-        }
+        //   toast.success("success");
+        //   navigate("/forgotOtp");
+        // } else if (res.data.message === "Invalid Email or Password") {
+        //   toast.error("Invalid Email or Password");
+        // }
       } catch (error) {
         toast.error(error);
       }
