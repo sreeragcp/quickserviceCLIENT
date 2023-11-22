@@ -1,8 +1,5 @@
 import axios from "axios";
 
-
-
-
 export const commonRequest = async(method, url, body, header,tocken)=>{
 
     const config = {
@@ -15,7 +12,6 @@ export const commonRequest = async(method, url, body, header,tocken)=>{
         },
         data:body
     }
-    //axios instance
     return axios(config).then((data)=>{
         return data
     }).catch((error)=>{
