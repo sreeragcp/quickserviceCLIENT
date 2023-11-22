@@ -36,8 +36,8 @@ function App() {
    <>
    <Routes>
    
-    <Route path='/admin' element={<AdminDashBoard/>}/>
-    <Route path='/admin/signin' element={<AdminLogin/>}/>
+    <Route path='/admin/dashboard' element={<AdminDashBoard/>}/>
+    <Route path='/admin' element={<AdminLogin/>}/>
     <Route path='/admin/location'element={<AdminLocation/>}/>
     <Route path='/admin/userList'element={<AdminUserList/>}/>
     <Route path='/admin/partnerList'element={<AdminPartnerList/>}/>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PartnerNavBar from "../../components/partner/PartnerNavBar";
-import { fetchPartnerEditFunction } from "../../services/apis";
-import { functionFetchPartnerData } from "../../services/apis";
+import { fetchPartnerEditFunction } from "../../services/Apis.js";
+import { functionFetchPartnerData } from "../../services/Apis.js";
 import { useSelector } from "react-redux";
 
 const PartnerProfile = () => {

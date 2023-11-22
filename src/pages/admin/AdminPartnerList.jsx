@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import AdminNavBar from "../../components/admin/AdminNavBar";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import { verifyPartnerFunction } from "../../services/apis";
-import { functionFetchPartner } from "../../services/apis";
+import { verifyPartnerFunction } from "../../services/Apis.js";
+import { functionFetchPartner } from "../../services/Apis.js";
 import { useSelector } from "react-redux";
 
 const AdminPartnerList = () => {

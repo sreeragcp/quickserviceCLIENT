@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import UserNavBar from "../../components/user/UserNavBar";
 import toast, { Toaster } from "react-hot-toast";
 import { useSelector } from "react-redux";
-import { userProfileFunction } from "../../services/apis";
-import { profileEditFunction } from "../../services/apis";
+import { userProfileFunction } from "../../services/Apis.js";
+import { profileEditFunction } from "../../services/Apis.js";
 import UserFooter from "../../components/user/UserFooter";
 
 const UserProfile = () => {

@@ -27,7 +27,7 @@ const AdminLogin = () => {
         const adminData ={admin,tocken}
         dispatch(setCredentials(adminData))
       if (res.data.message === "success") {
-          navigate("/admin");
+          navigate("/admin/dashboard");
         }
     } catch (err) {
       toast.error(err?.data?.message || err.error);

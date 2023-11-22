@@ -1,7 +1,7 @@
 import React, { useState, useEffect,useRef } from 'react'
 import Chart from 'chart.js/auto';
 // import { functionPerdayEarnings } from '../../services/Apis';
-import { getTotalBookingDetails } from '../../services/apis';
+import { getTotalBookingDetails } from '../../services/Apis.js';
 import {useSelector } from "react-redux";
 
 
@@ -9,7 +9,7 @@ import {useSelector } from "react-redux";
 
 const AdminChart = () => {
 
-  const  tocken  = useSelector((state) => state.tocken.tocken);
+  const  tocken  = useSelector((state) => state?.tocken?.tocken);
   const [monthlyUserData, setMonthlyUserData] = useState([]);
     // const [monthlyData, setMonthlyData] = useState([]);
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect,useRef } from 'react'
 import Chart from 'chart.js/auto';
-import { functionPerdayEarnings } from '../../services/apis';
-import { functionGetUserRegister } from '../../services/apis';
+import { functionGetUserRegister } from '../../services/Apis.js';
 
 const AdminChatOne = () => {
 

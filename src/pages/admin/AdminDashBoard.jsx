@@ -2,7 +2,7 @@ import React, { useState, useEffect,useRef } from 'react'
 import AdminNavBar from '../../components/admin/AdminNavBar'
 import AdminChart from './AdminChart'
 import AdminChatOne from './AdminChatOne'
-import { functionGetAdminMonthData } from '../../services/apis'
+import { functionGetAdminMonthData } from '../../services/Apis.js'
 import {useSelector } from "react-redux";
 
 const AdminDashBoard = () => {

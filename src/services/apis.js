@@ -1,7 +1,7 @@
-import {commonRequest} from "./ApiCalls";
-import { commonRequestAdmin } from "./ApiCalls";
-import { commonRequestPartner } from "./ApiCalls";
-import { BACKEND_URL } from "./Helper";
+import {commonRequest} from "./ApiCalls.js";
+import { commonRequestAdmin } from "./ApiCalls.js";
+import { commonRequestPartner } from "./ApiCalls.js";
+import { BACKEND_URL } from "./Helper.js";
 
 export const userProfileFunction = async(userId,tocken)=>{
     return await commonRequest("GET",`${BACKEND_URL}/profile/${userId}`,null,null,tocken)
