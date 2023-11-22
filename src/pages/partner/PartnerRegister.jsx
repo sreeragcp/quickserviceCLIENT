@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
-import  {vehicleFetchFunction}  from "../../services/Apis";
+import  {vehicleFetchFunction}  from "../../services/apis";
 import PartnerNavBar from "../../components/partner/PartnerNavBar";
 
 const PartnerRegister = () => {

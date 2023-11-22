@@ -1,7 +1,7 @@
 import React,{useEffect, useState} from 'react'
 import AdminNavBar from '../../components/admin/AdminNavBar'
-import { functionFetchBookingDetails } from '../../services/Apis'
-import { functionFetchDetails } from '../../services/Apis'
+import { functionFetchBookingDetails } from '../../services/apis'
+import { functionFetchDetails } from '../../services/apis'
 import moment from 'moment';
 import {useSelector } from "react-redux";
 

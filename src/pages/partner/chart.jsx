@@ -1,7 +1,7 @@
 import React, { useState, useEffect,useRef } from 'react'
 import Chart from 'chart.js/auto';
 import PartnerNavBar from '../../components/partner/PartnerNavBar';
-import { functionPerdayEarnings } from '../../services/Apis';
+import { functionPerdayEarnings } from '../../services/apis';
 import { useSelector } from "react-redux";
 
 const chart = () => {

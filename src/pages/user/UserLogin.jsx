@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import { useLoginMutation } from "../../slices/userApiSlice";
 import toast, { Toaster } from "react-hot-toast";
 import { setCredentials } from "../../slices/authSlice";
-import { forgetUserPasswordFunction } from "../../services/Apis";
+import { forgetUserPasswordFunction } from "../../services/apis";
 import { userSigninValidation } from "../../validations/UserValidation";
 import { userForgotPasswordMail } from "../../validations/UserValidation";
 import * as yup from "yup";

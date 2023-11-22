@@ -5,7 +5,7 @@ import Chart from 'chart.js/auto';
 // import { LineChart } from '@mui/x-charts/LineChart';
 // import { Listbox } from '@headlessui/react';
 import PartnerNavBar from '../../components/partner/PartnerNavBar';
-import { functionPerdayEarnings } from '../../services/Apis';
+import { functionPerdayEarnings } from '../../services/apis';
 
 const ChartOne = () => {
 

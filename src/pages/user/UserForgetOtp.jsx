@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import { verifyOtpFunction } from "../../services/Apis";
+import { verifyOtpFunction } from "../../services/apis";
 
 const UserForgetOtp = () => {
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { resetPasswordFunction } from "../../services/Apis";
+import { resetPasswordFunction } from "../../services/apis";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { userNewPasswordValidation } from "../../validations/UserValidation";

@@ -2,12 +2,12 @@ import React, { useState, useEffect,useRef } from 'react'
 import AdminNavBar from '../../components/admin/AdminNavBar'
 import AdminChart from './AdminChart'
 import AdminChatOne from './AdminChatOne'
-import { functionGetAdminMonthData } from '../../services/Apis';
+import { functionGetAdminMonthData } from '../../services/apis'
 import {useSelector } from "react-redux";
 
 const AdminDashBoard = () => {
 
-  const  tocken  = useSelector((state) => state.tocken.tocken);
+  const  tocken  = useSelector((state) => state?.tocken?.tocken);
 
   const [totalAmount,setTotalAmount] = useState()
   const [totalBooking,setTotalBooking] = useState()
@@ -19,7 +19,7 @@ const AdminDashBoard = () => {
     const adminData = await functionGetAdminMonthData(tocken)
     if(adminData){
       setTotalAmount(adminData.data.result.totalAmount)
-      setTotalBooking(adminData.data.result.totalBookings)git 
+      setTotalBooking(adminData.data.result.totalBookings)
       setMonthlyAmount(adminData.data.datas[0].totalAmount)
       setMonthlyBooking(adminData.data.datas[0].totalBookings)
     }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PartnerNavBar from "../../components/partner/PartnerNavBar";
-import { functionBookingDetails } from "../../services/Apis";
+import { functionBookingDetails } from "../../services/apis";
 import moment from "moment";
 import { Chart } from "chart.js";
 import { useSelector } from "react-redux";

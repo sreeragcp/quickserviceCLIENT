@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AdminNavBar from "../../components/admin/AdminNavBar";
-import { functionAddCoupon } from "../../services/Apis";
-import { functionFecthCoupon } from "../../services/Apis";
+import { functionAddCoupon } from "../../services/apis";
+import { functionFecthCoupon } from "../../services/apis";
 import { useSelector } from "react-redux";
 
 const AdminCoupon = () => {

@@ -3,16 +3,16 @@ import io, { Socket } from "socket.io-client";
 import { Loader } from "google-maps";
 import UserNavBar from "../../components/user/UserNavBar";
 import { useParams } from "react-router-dom";
-import { fetchVehicleDetails } from "../../services/Apis";
-import { fetchCouponData } from "../../services/Apis";
-import { functionBookingHandle } from "../../services/Apis";
+import { fetchVehicleDetails } from "../../services/apis";
+import { fetchCouponData } from "../../services/apis";
+import { functionBookingHandle } from "../../services/apis";
 import { useSelector } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import useRazorpay from "react-razorpay";
-import { functionBookingCompletion } from "../../services/Apis";
+import { functionBookingCompletion } from "../../services/apis";
 import { useNavigate } from "react-router-dom";
 import UserFooter from "../../components/user/UserFooter";
-import { functionCouponApply } from "../../services/Apis";
+import { functionCouponApply } from "../../services/apis";
 
 const UserVehicleDetail = () => {
   const [Razorpay] = useRazorpay();

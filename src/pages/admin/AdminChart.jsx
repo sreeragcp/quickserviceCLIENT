@@ -1,7 +1,7 @@
 import React, { useState, useEffect,useRef } from 'react'
 import Chart from 'chart.js/auto';
 // import { functionPerdayEarnings } from '../../services/Apis';
-import { getTotalBookingDetails } from '../../services/Apis';
+import { getTotalBookingDetails } from '../../services/apis';
 import {useSelector } from "react-redux";
 
 
