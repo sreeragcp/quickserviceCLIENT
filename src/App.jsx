@@ -6,7 +6,7 @@ import UserLogin from './pages/user/UserLogin'
 import UserRegister from './pages/user/UserRegister'
 import UserOtp from './pages/user/UserOtp'
 import AdminLogin from './pages/admin/AdminLogin'
-// import AdminDashBoard from './pages/admin/adminDashBoard'
+import AdminDashBoard from './pages/admin/AdminDashBoard'
 import PartnerDashboard from './pages/partner/PartnerDashboard'
 import PartnerLogin from './pages/partner/PartnerLogin'
 import PartnerRegister from './pages/partner/PartnerRegister'
@@ -36,7 +36,7 @@ function App() {
    <>
    <Routes>
    
-    {/* <Route path='/admin' element={<AdminDashBoard/>}/> */}
+    <Route path='/admin' element={<AdminDashBoard/>}/>
     <Route path='/admin/signin' element={<AdminLogin/>}/>
     <Route path='/admin/location'element={<AdminLocation/>}/>
     <Route path='/admin/userList'element={<AdminUserList/>}/>
