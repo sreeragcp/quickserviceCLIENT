@@ -2,7 +2,7 @@ import React, { useState, useEffect,useRef } from 'react'
 import AdminNavBar from '../../components/admin/AdminNavBar'
 import AdminChart from './AdminChart'
 import AdminChatOne from './AdminChatOne'
-import { functionGetAdminMonthData } from '../../services/Apis';
+// import { functionGetAdminMonthData } from '../../services/Apis';
 import {useSelector } from "react-redux";
 
 const AdminDashBoard = () => {
@@ -16,16 +16,16 @@ const AdminDashBoard = () => {
 
 
   const adminMonthlyData = async()=>{
-    const adminData = await functionGetAdminMonthData(tocken)
-    if(adminData){
-      setTotalAmount(adminData.data.result.totalAmount)
-      setTotalBooking(adminData.data.result.totalBookings)
-      setMonthlyAmount(adminData.data.datas[0].totalAmount)
-      setMonthlyBooking(adminData.data.datas[0].totalBookings)
-    }
-    else{
-        console.log("there is no data is found");
-    }
+    // const adminData = await functionGetAdminMonthData(tocken)
+    // if(adminData){
+    //   setTotalAmount(adminData.data.result.totalAmount)
+    //   setTotalBooking(adminData.data.result.totalBookings)git 
+    //   setMonthlyAmount(adminData.data.datas[0].totalAmount)
+    //   setMonthlyBooking(adminData.data.datas[0].totalBookings)
+    // }
+    // else{
+    //     console.log("there is no data is found");
+    // }
    
 }
 
