@@ -16,7 +16,7 @@ const authSlice = createSlice({
       state.tocken=action.payload;
       state.userData = action.payload.userData;
       state.partnerData = action.payload.partner
-      state.adminData = action.payload.adminData
+      state.adminData = action.payload.admin
       localStorage.setItem("token", JSON.stringify(action.payload));
       
     },

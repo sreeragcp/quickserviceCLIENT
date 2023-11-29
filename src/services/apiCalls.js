@@ -32,7 +32,6 @@ export const commonRequestAdmin = async(method, url, body, header,tocken)=>{
         },
         data:body
     }
-    //axios instance
     return axios(config).then((data)=>{
         return data
     }).catch((error)=>{
@@ -52,7 +51,6 @@ export const commonRequestPartner = async(method, url, body, header,tocken)=>{
         },
         data:body
     }
-    //axios instance
     return axios(config).then((data)=>{
         return data
     }).catch((error)=>{

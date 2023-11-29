@@ -19,10 +19,8 @@ const UserVehicleDetail = () => {
   let amount;
   const socket = io("https://quickservice.website");
 
-  const token = useSelector((state) => state.tocken);
-  const tocken = useSelector((state)=>state.tocken.tocken)
-
-  console.log(token, "thissis token");
+  const userData = useSelector((state) => state?.tocken?.userData);
+  const tocken = useSelector((state) => state?.tocken?.tocken);
 
   const navigate = useNavigate();
 
@@ -38,11 +36,9 @@ const UserVehicleDetail = () => {
   const [room, setRoom] = useState("");
   const [bookingButton, setBookingButton] = useState("");
   const [bookerName, setBookerName] = useState("");
-  const [phnNumber, setPhnNumber] = useState("");
+  const [reciverEmail, setReciverEmail] = useState("");
+  const [weight,setWeight] = useState("")
   // let distanceValue
-
-  console.log(bookerName, "this is the name");
-  console.log(phnNumber, "this is the phn Number");
 
   const { id } = useParams();
   const googleApiKey = import.meta.env.VITE_GOOGLE_MAP_API_KEY;
@@ -94,8 +90,7 @@ const UserVehicleDetail = () => {
   }, []);
 
   const fetchVehicle = async () => {
-  
-    const res = await fetchVehicleDetails(id,tocken);
+    const res = await fetchVehicleDetails(id, tocken);
     if (res.data) {
       setVehicle(res.data);
     }
@@ -165,16 +160,16 @@ const UserVehicleDetail = () => {
         travelMode: google.maps.TravelMode.DRIVING,
       })
       .then((response) => {
-        console.log(response, "this is the reponse");
         directionsRenderer.setDirections(response);
         const route = response.routes[0];
         const leg = route.legs[0];
         const distance = leg?.distance?.value;
         const totalDistance = distance / 1000;
         const pricePerKm = vehicle.pricePerKm;
-        const price = totalDistance * pricePerKm;
+        const pricePerKg = 10
+        const price = totalDistance * pricePerKm+pricePerKg*weight
         setPrice(price);
-        setTotalPrice(price)
+        setTotalPrice(price);
       })
       .catch((e) => {
         console.log(e);
@@ -184,13 +179,30 @@ const UserVehicleDetail = () => {
 
   window.initMap = initMap;
 
+  const calculatePrice = (
+    weight,
+    distance,
+    basePrice,
+    ratePerKg,
+    ratePerKm
+  ) => {
+    // const basePrice = 30;
+    // const ratePerKg = 5;
+    // const ratePerKm = 20;
+    const weightCost = weight * ratePerKg;
+    const distanceCost = distance * ratePerKm;
+
+    const totalPrice = basePrice + weightCost + distanceCost;
+
+    return totalPrice;
+  };
+
   /// coupon apply////
 
   const applyCoupon = async (code) => {
-    const data ={code,price}
-    const res = await functionCouponApply(data,tocken)
-    console.log(res,"this is the apply coupon response");
-    if(res.data){
+    const data = { code, price };
+    const res = await functionCouponApply(data, tocken);
+    if (res.data) {
       setTotalPrice(res.data);
     }
     toast.success("Coupon applied successfully");
@@ -200,14 +212,14 @@ const UserVehicleDetail = () => {
 
   const HandleBooking = async () => {
     try {
-      const userId = token.userData._id;
+      const userId = userData._id
       const city = localStorage.getItem("selectedCity");
       const data = {
         city: city,
         pickupPoint: pickupPoint,
         dropPoint: dropPoint,
       };
-          const res = await functionBookingHandle(userId,data,tocken);
+      const res = await functionBookingHandle(userId, data, tocken);
       if (res.data) {
         setPartner(res.data);
         setEmail(res.data._id);
@@ -218,11 +230,9 @@ const UserVehicleDetail = () => {
   };
 
   useEffect(() => {
-    const userId = token.userData.email;
+    const userId =userData.email;
     socket.emit("join", userId);
-    socket.on("message", (data) => {
-      console.log(data, "this is tahedata");
-    });
+    socket.on("message", (data) => {});
 
     socket.on("acceptBooking", (data) => {
       toast.success("accept");
@@ -247,7 +257,8 @@ const UserVehicleDetail = () => {
       pickupPoint: pickupPoint,
       dropPoint: dropPoint,
       totalPrice: totalPrice,
-      number: phnNumber,
+      weight: weight,
+      email: reciverEmail,
       name: bookerName,
     };
     e.preventDefault();
@@ -263,7 +274,7 @@ const UserVehicleDetail = () => {
         description: "for testing purpose",
         handler: async function (response) {
           if (response) {
-            const res = await functionBookingCompletion(data,tocken);
+            const res = await functionBookingCompletion(data, tocken);
             if (res.data.message === "success") {
               navigate("/bookingCompletion");
             }
@@ -290,10 +301,12 @@ const UserVehicleDetail = () => {
     }
   };
 
-  const [selectedCoupon, setSelectedCoupon] = useState('');
+  const [selectedCoupon, setSelectedCoupon] = useState("");
 
   const handleCouponChange = (event) => {
+    console.log("inside the handle change");
     const selectedValue = event.target.value;
+    console.log(selectedValue, "this is the selectedd value");
     setSelectedCoupon(selectedValue);
     applyCoupon(selectedValue);
   };
@@ -336,15 +349,30 @@ const UserVehicleDetail = () => {
                   />
                 </div>
               </div>
+
               <div className="w-1/5 border ">
                 <div>
-                  <p className="ml-6 mt-7">Phone Number*</p>
+                  <p className="ml-6 mt-7">Weight*</p>
                   <input
-                    id="phn_number"
-                    value={phnNumber}
-                    onChange={(e) => setPhnNumber(e.target.value)}
-                    type="number"
-                    placeholder="Contact details"
+                    id="weight"
+                    value={weight}
+                    onChange={(e) => setWeight(e.target.value)}
+                    type="weight"
+                    placeholder="weight"
+                    className=" mt-2 ml-2 input h-7 w-11/12 rounded-sm"
+                  />
+                </div>{" "}
+              </div>
+            
+              <div className="w-1/5 border ">
+                <div>
+                  <p className="ml-6 mt-7">Email*</p>
+                  <input
+                    id="email"
+                    value={reciverEmail}
+                    onChange={(e) => setReciverEmail(e.target.value)}
+                    type="email"
+                    placeholder="Contact"
                     className=" mt-2 ml-2 input h-7 w-11/12 rounded-sm"
                   />
                 </div>{" "}

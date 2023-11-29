@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import PartnerNavBar from "../../components/partner/PartnerNavBar";
 import { io } from "socket.io-client";
 import { useSelector } from "react-redux";
-import toast, { Toaster } from "react-hot-toast";
+// import toast, { Toaster } from "react-hot-toast";
+import {toast} from "react-toastify"
 import { functionRequestAccept } from "../../services/Apis.js";
 import { functionRequestReject } from "../../services/Apis.js";
 import { funtionGenerateOtp } from "../../services/Apis.js";
@@ -13,22 +14,24 @@ import axios from "axios";
 import InputText from "./InputText";
 import ChatContainer from "./ChatContainer";
 import { FaComments } from "react-icons/fa";
-
+import { getbookedUserdata } from "../../services/Apis.js";
 const PartnerOrderManage = () => {
   const googleApiKey = import.meta.env.VITE_GOOGLE_MAP_API_KEY;
-  const partnerData = useSelector((state) => state.tocken.partnerData);
-  const tocken = useSelector((state)=>state.tocken.tocken)
-  const partnerEmail = partnerData.email;
 
+  const partnerData = useSelector((state) => state?.tocken?.partnerData);
+  const tocken = useSelector((state)=>state?.tocken?.tocken)
+
+  const partnerEmail = partnerData.email;
+  const [userData,setUserData] = useState()
   const [pickupPoint, setPickupPoint] = useState(null);
   const [dropPoint, setDropPoint] = useState(null);
-
+  const [currentBook,setCurrentBook] = useState(false)
   const [message, setMessage] = useState([]);
-  const [clicked, setClicked] = useState(false);
+  const [clicked, setClicked] = useState(true);
   const [step, setStep] = useState(0);
   const [email, setEmail] = useState("");
   const [response, setResponse] = useState();
-  const [otpPage, setOtpPage] = useState(true);
+  const [otpPage, setOtpPage] = useState(false);
   const [currentBookingData, setCurrentBookingData] = useState([]);
   const [otp1, setOtp1] = useState("");
   const [otp2, setOtp2] = useState("");
@@ -47,6 +50,8 @@ const PartnerOrderManage = () => {
       setEmail(data.userData.email);
       setPickupPoint(data.pickupPoint);
       setDropPoint(data.dropPoint);
+      localStorage.setItem("pickupPoint",data.pickupPoint)
+      localStorage.setItem("dropPoint",data.dropPoint)
     });
 
     socket.emit("test_message", { message: "accepted" });
@@ -56,18 +61,26 @@ const PartnerOrderManage = () => {
     };
   }, [[partnerEmail, socket]]);
 
+
   const submitAccept = async () => {
     try {
       const userId = message.userData._id;
-      const res = await functionRequestAccept(userId,tocken);
-    } catch (error) {}
+      const res = await functionRequestAccept(userId);
+      if(res){
+        setCurrentBook(true)
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const submitReject = async () => {
     try {
       const userId = message.userData._id;
-      const res = await functionRequestReject(userId,tocken);
-    } catch (error) {}
+      const res = await functionRequestReject(userId);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const closeModal = () => {
@@ -149,19 +162,29 @@ const PartnerOrderManage = () => {
   };
 
   const getBookingData = async () => {
-    console.log("inside the booking data");
     try {
+     
       const partnerId = partnerData._id;
-      console.log(partnerId,"this is the partnerId");
       const response = await functionCurrentBooking(partnerId,tocken);
-      console.log(response,"thisi is the response");
       if (response) {
         setCurrentBookingData(response.data);
+        getUserinfo()
       }
     } catch (error) {
       console.log(error.messsage);
     }
   };
+  const getUserinfo = async()=>{
+    try {
+      const userId = currentBookingData.userId
+      const userdata = await getbookedUserdata(userId)
+      if(userdata){
+        setUserData(userdata.data)
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
   const updateBooking = async (status) => {
     try {
@@ -170,10 +193,13 @@ const PartnerOrderManage = () => {
         `https://quickservice.website/partner/updateBooking/${partnerId}`,
         { status }
       );
+      toast.success(res.data.message)
+      localStorage.setItem('status',res.data.data)
       setResponse(res.data);
-      if (response.data === "out_for_delivery") {
+      if (res.data.data === "out_for_delivery") {
+     
         const orderOtp = await funtionGenerateOtp(partnerId);
-        console.log(orderOtp, "this is orderOtp");
+        console.log(orderOtp,"this is the order otp");
         if (orderOtp.data.message === "success") {
           setOtpPage(true);
         }
@@ -184,8 +210,9 @@ const PartnerOrderManage = () => {
   };
 
   useEffect(() => {
-    getBookingData()
-  }, []);
+    getBookingData()  
+  },[]);
+
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
 
@@ -194,6 +221,7 @@ const PartnerOrderManage = () => {
   };
 
   const handleStatusClick = (status) => {
+    console.log("inside the handle click");
     updateBooking(status);
     setDropdownOpen(false);
   };
@@ -222,7 +250,11 @@ const PartnerOrderManage = () => {
     setSelectedBookingDetails({});
   };
 
-  console.log(currentBookingData, "this is currentBoooing data");
+  useEffect(()=>{
+    getUserinfo()
+  },[currentBookingData])
+
+const status = localStorage.getItem("status")
   return (
     <>
       <PartnerNavBar />
@@ -295,83 +327,107 @@ const PartnerOrderManage = () => {
                       >
                         Verify
                       </button>
-                      {/* <div className="flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-gray-500 mt-2">
-                        <p>Didn't receive the code?</p>{" "}
-                        <a
-                          className="flex flex-row items-center text-blue-600"
-                          href="http://"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Resend
-                        </a>
-                      </div> */}
+                  
                     </div>
                   </form>
                 </div>
               ) : (
                 <div></div>
               )}
-              <div className=" w-40  overflow-hidden bg-white rounded-lg shadow-lg ">
-                <h1 className="ml-11 text-sm font-normal text-emerald-500">
-                  COSTOMER
-                </h1>
-                <div className="flex mt-2">
-                  <div>
-                    <p className="font-medium text-gray-500 dark:text-gray-400 ml-2">
-                      Name :
-                    </p>
-                    <p className="font-medium text-gray-500 dark:text-gray-400 ml-2">
-                      Mobile :
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-lg font-semibold">
-                      {message?.userData?.name}
-                    </p>
-                    <p className="text-lg font-semibold">
-                      {message?.userData?.mobile}
-                    </p>
-                  </div>
+              {currentBookingData&&userData?<div className=" w-40 border border-black  overflow-hidden bg-white rounded-lg shadow-lg ">
+              <h1 className="ml-11 text-sm font-normal text-emerald-500">
+                COSTOMER
+              </h1>
+              <div className="flex mt-2">
+                <div>
+                  <p className="font-medium text-gray-500 dark:text-gray-400 ml-2">
+                    Name :
+                  </p>
+                  <p className="font-medium text-gray-500 dark:text-gray-400 ml-2">
+                    Mobile :
+                  </p>
                 </div>
-                {/* <p type="button" onClick={openModal}>
-                My route
-              </p> */}
-                <img
-                  onClick={openModal}
-                  className="ml-28 w-10 h-10 cursor-pointer animate-bounce"
-                  src="../images/location.svg"
-                  alt=""
-                />
-                {/* <img className="h-28 rounded-md" src=".\images\download (5).jpeg" alt="" /> */}
+                
+                <div>
+                  <p className="text-md font-semibold">
+                    {userData.name}
+                  </p>
+                  <p className="text-md font-semibold">
+                    {userData.mobile}
+                  </p>
+                </div>
               </div>
+            
+              <img
+                onClick={openModal}
+                className="ml-28 w-10 h-10 cursor-pointer animate-bounce"
+                src="../images/location.svg"
+                alt=""
+              />
             </div>
-            <div className="flex justify-end mr-3 mt-3">
-              <div>
-                <button
-                  onClick={submitAccept}
-                  on
-                  className=" w-16 h-8 rounded-md text-white bg-green-400 "
-                >
-                  Accept
-                </button>
+              :<div className=" w-40 border border-black  overflow-hidden bg-white rounded-lg shadow-lg ">
+              <h1 className="ml-11 text-sm font-normal text-emerald-500">
+                COSTOMER
+              </h1>
+              <div className="flex mt-2">
+                <div>
+                  <p className="font-medium text-gray-500 dark:text-gray-400 ml-2">
+                    Name :
+                  </p>
+                  <p className="font-medium text-gray-500 dark:text-gray-400 ml-2">
+                    Mobile :
+                  </p>
+                </div>
+                <div>
+                  <p className="text-lg font-semibold">
+                    {message?.userData?.name}
+                  </p>
+                  <p className="text-lg font-semibold">
+                    {message?.userData?.mobile}
+                  </p>
+                </div>
               </div>
-              <div>
-                <button
-                  onClick={submitReject}
-                  className="ml-3 w-16 h-8 rounded-md text-white bg-red-500 "
-                >
-                  Reject
-                </button>
-              </div>
+            
+              <img
+                onClick={openModal}
+                className="ml-28 w-10 h-10 cursor-pointer animate-bounce"
+                src="../images/location.svg"
+                alt=""
+              />
             </div>
+              }
+              
+              
+            </div>
+          {currentBookingData?<div></div>
+          :  <div className="flex justify-end mr-3 mt-3">
+          <div>
+            <button
+              onClick={submitAccept}
+              on
+              className=" w-16 h-8 rounded-md text-white bg-green-400 "
+            >
+              Accept
+            </button>
+          </div>
+          <div>
+            <button
+              onClick={submitReject}
+              className="ml-3 w-16 h-8 rounded-md text-white bg-red-500 "
+            >
+              Reject
+            </button>
+          </div>
+        </div>}
+           
+           
 
             <div className="mt-14  w-full ">
               <div className="flex justify-between w-full mt-2 rounded-lg h-8 bg-[#7EAC8B]">
                 <div className="ml-7 mt-1  font-semibold">STATUS</div>
                 <div className="mr-7 mt-1  font-semibold">
                   <button className="w-36 h-5" onClick={toggleDropdown}>
-                    {response ? response.data : "UPDATE STATUS"}{" "}
+                    {response ? status : "UPDATE STATUS"}{" "}
                   </button>
                   {isDropdownOpen && (
                     <div className="origin-top-right absolute right-0 mt-2 mr-10 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">

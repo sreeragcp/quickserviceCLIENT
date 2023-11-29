@@ -51,8 +51,6 @@ useEffect(() => {
       },
     },
   });
-
-  // Cleanup when the component is unmounted
   return () => {
     myChart.destroy();
   };

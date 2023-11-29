@@ -4,33 +4,33 @@ import ChatBoxReciever, { ChatBoxSender } from "./ChatBoxPartnerSide";
 import InputText from "./InputText";
 import { useSelector } from "react-redux";
 
-// import { useParams } from "react-router-dom";
 
 
-const styles = {
+// const styles = {
      
-}
+// }
 
-const ChatContainer = ({ bookingId, userId, partnerId, closeChatModal }) => {
+const ChatContainer = ({ bookingId, userId, partnerId, closeChatModal}) => {
 ;
 
+const partnerData = useSelector((state)=>state.tocken.partnerData)
+
   let socketio = socketIOClient("https://quickservice.website");
-  // let socketio = socketIOClient("https://www.car-rentals.shop");
+
   const [chats, setChats] = useState([]);
   const [user, setUser] = useState(localStorage.getItem("partnerData.name"));
-  // const [avatar, setAvatar] = useState(localStorage.getItem("avatar"));
-  //   const { bookingId, userId, partnerId } = useParams();
+
 
   const [messageList, setMessageList] = useState([]);
 
-  const currentUser = JSON.parse(localStorage.getItem("partnerData"));
- const currentUserId=currentUser._id
+
+ const currentUserId=partnerData._id
   const [messageTriger, setMessageTriger] = useState(new Date());
 
   useEffect(() => {
     socketio.on("connect", () => {
       console.log("Connected to Socket.IO server");
-    });
+    },[]);
 
 
 
@@ -44,15 +44,14 @@ const ChatContainer = ({ bookingId, userId, partnerId, closeChatModal }) => {
       // Disconnect the socket when the component unmounts
       socketio.disconnect();
     };
-  }, [messageTriger,bookingId]);
+  },[messageTriger,bookingId]);
 
-
+console.log(messageList,"this is the recived ");
 
 
   const [message, setMessage] = useState("");
 
   async function sendMessageToServer() {;
-
     try {
       socketio.emit("addMessage", {
         bookingId,
@@ -85,9 +84,8 @@ const ChatContainer = ({ bookingId, userId, partnerId, closeChatModal }) => {
           if (chat.sender === currentUserId) {
             return (
               <ChatBoxSender
-                // key={index}
                 message={chat.text}
-                // avatar={chat.avatar}
+                timestamp={chat.timestamp}
                 user={chat.userName}
               />
             );
@@ -96,7 +94,7 @@ const ChatContainer = ({ bookingId, userId, partnerId, closeChatModal }) => {
               <ChatBoxReciever
                 key={index}
                 message={chat.text}
-                // avatar={chat.avatar}
+                timestamp={chat.timestamp}
                 user={chat.userName}
               />
             );

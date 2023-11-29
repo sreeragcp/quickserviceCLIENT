@@ -13,7 +13,7 @@ const AdminLogin = () => {
 
   const dispatch = useDispatch()
 
-  const  adminData  = useSelector((state) => state.tocken.admin);
+  const  adminData  = useSelector((state) => state?.tocken?.tocken);
 
   const navigate = useNavigate();
 
@@ -24,7 +24,9 @@ const AdminLogin = () => {
         const res = await axios.post("https://quickservice.website/admin/login",data)
         const admin = res.data.admin
         const tocken = res.data.tocken
-        const adminData ={admin,tocken}
+        const adminData ={
+          adminData:admin,
+          tocken:tocken}
         dispatch(setCredentials(adminData))
       if (res.data.message === "success") {
           navigate("/admin/dashboard");

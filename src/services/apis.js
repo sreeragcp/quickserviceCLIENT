@@ -7,6 +7,16 @@ export const userProfileFunction = async(userId,tocken)=>{
     return await commonRequest("GET",`${BACKEND_URL}/profile/${userId}`,null,null,tocken)
 }
 
+export const userRegisterFuction = async(data)=>{
+    return await commonRequest("POST",`${BACKEND_URL}/register`,data)
+}
+
+export const userLoginFuction = async(data)=>{
+    console.log(data,"this is the data");
+    return await commonRequest("POST",`${BACKEND_URL}/login`,data)
+}
+
+
 export const vehicleFetchFunction = async()=>{
     return await commonRequestPartner("GET",`${BACKEND_URL}/partner/vehcileList`)
 }
@@ -31,8 +41,8 @@ export const resetPasswordFunction = async(data)=>{
     return await commonRequest("PATCH",`${BACKEND_URL}/restPassword`,data)
 }
 
-export const verifyPartnerFunction = async(data)=>{
-    return await commonRequestAdmin("PATCH",`${BACKEND_URL}/admin/verifyPartner`,data)
+export const verifyPartnerFunction = async(data,tocken)=>{
+    return await commonRequestAdmin("PATCH",`${BACKEND_URL}/admin/verifyPartner`,data,null,tocken)
 }
 
 export const fetchVehicleDetails = async(vehicleId,tocken)=>{
@@ -58,12 +68,12 @@ export const functionFetchPartnerData = async(partnerId,tocken)=>{
 export const functionBookingHandle = async(userId,data,tocken)=>{
     return await commonRequest("POST",`${BACKEND_URL}/handleBooking/${userId}`,data,null,tocken)
 }
-export const functionRequestAccept = async(userId,tocken)=>{
-    return await commonRequestPartner("POST",`${BACKEND_URL}/partner/accept/${userId}`,null,null,tocken)
+export const functionRequestAccept = async(userId)=>{
+    return await commonRequestPartner("POST",`${BACKEND_URL}/partner/accept/${userId}`)
 }
 
-export const functionRequestReject = async(userId,tocken)=>{
-    return await commonRequestPartner("POST",`${BACKEND_URL}/partner/reject/${userId}`,null,null,tocken)
+export const functionRequestReject = async(userId)=>{
+    return await commonRequestPartner("POST",`${BACKEND_URL}/partner/reject/${userId}`)
 }
 
 export const functionBookingCompletion = async(data,tocken)=>{
@@ -83,8 +93,8 @@ export const functionBookingDetail = async(userId,tocken)=>{
     return await commonRequest("GET",`${BACKEND_URL}/detailBooking/${userId}`,null,null,tocken)
 }
 
-export const functionBookingCancel = async(bookingId,tocken)=>{
-    return await commonRequest("PATCH",`${BACKEND_URL}/cancelBooking/${bookingId}`,null,null.tocken)
+export const functionBookingCancel = async(bookingId)=>{
+    return await commonRequest("PUT",`${BACKEND_URL}/cancelBooking/${bookingId}`)
 }
 
 export const functionFetchBookingDetails = async(tocken)=>{
@@ -111,7 +121,7 @@ export const functionCurrentBooking = async(partnerId,tocken)=>{
     return await commonRequestPartner("GET",`${BACKEND_URL}/partner/currentBooking/${partnerId}`,null,null,tocken)
 }
 
-export const functionCouponApply = async(data)=>{
+export const functionCouponApply = async(data,tocken)=>{
     return await commonRequest("POST",`${BACKEND_URL}/applyCoupon`,data,null,tocken)
 }
 
@@ -124,16 +134,19 @@ export const functionPerdayEarnings = async(tocken)=>{
     return await commonRequestPartner("GET",`${BACKEND_URL}/partner/graph`,null,null,tocken)
 }
 
-export const functionGetAdminMonthData = async(tocken)=>{
+export const functionGetAdminMonthData =async(tocken)=>{
     return await commonRequestAdmin("GET",`${BACKEND_URL}/admin/graph`,null,null,tocken)
 }
 
-export const getTotalBookingDetails = async(tocken)=>{
+export const getTotalBookingDetails =async(tocken)=>{
     return await commonRequestAdmin("GET",`${BACKEND_URL}/admin/bookingDetails`,null,null,tocken)
 }
 
 export const functionGetUserRegister = async()=>{
     return await commonRequestAdmin("GET",`${BACKEND_URL}/admin/getuserRegister`)
+}
+export const getbookedUserdata = async(userId)=>{
+    return await commonRequestPartner("GET",`${BACKEND_URL}/partner/getuserData/${userId}`)
 }
 
 

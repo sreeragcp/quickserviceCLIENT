@@ -5,6 +5,8 @@ import UserHome from './pages/user/UserHome'
 import UserLogin from './pages/user/UserLogin'
 import UserRegister from './pages/user/UserRegister'
 import UserOtp from './pages/user/UserOtp'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import AdminLogin from './pages/admin/AdminLogin'
 import AdminDashBoard from './pages/admin/AdminDashBoard'
 import PartnerDashboard from './pages/partner/PartnerDashboard'
@@ -33,7 +35,8 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-   <>
+   <><ToastContainer />
+
    <Routes>
    
     <Route path='/admin/dashboard' element={<AdminDashBoard/>}/>
@@ -46,8 +49,8 @@ function App() {
     <Route path='/admin/booking'element={<AdminBooking/>}/>
 
 
-    <Route path='/partner' element={<PartnerDashboard/>}/>
-    <Route path='/partner/signin' element={<PartnerLogin/>}/>
+    <Route path='/partner/dashboard' element={<PartnerDashboard/>}/>
+    <Route path='/partner' element={<PartnerLogin/>}/>
     <Route path='/partner/signup' element={<PartnerRegister/>}/>
     <Route path='/partner/otp' element={<PartnerOtp/>}/>
     <Route path='/partner/profile' element={<PartnerProfile/>}/>

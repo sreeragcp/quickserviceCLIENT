@@ -1,25 +1,31 @@
 import React, { useState,useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import { verifyOtpFunction } from "../../services/apis";
+import { verifyOtpFunction } from "../../services/Apis"
+import { forgetUserPasswordFunction } from "../../services/Apis";
 
 const UserForgetOtp = () => {
 
   const [timeotp, setTimeOtp] = useState()
+  const [timer,setTimer] =useState(new Date())
 
-
+const email = useParams()
 
   const resetPassword = async (e) => {
+
     e.preventDefault()
-    console.log("inside the forget password");
     try {
-      const res = await forgetUserPasswordFunction({resetEmail});
-      console.log(res,"this is tge res");
-      if (res.data.message === "success") {
-        localStorage.setItem("timer",new Date())
-       
+      const email = JSON.parse(localStorage.getItem("forgotemail"))
+      if(!email){
+        retrun
+      }
+      const res = await forgetUserPasswordFunction({email});
+     
+      if (res.data.message === "Your email is already registered") {
+
+        localStorage.setItem("timer", new Date());
+        setTimer(new Date())
         toast.success("success");
-        // navigate("/forgotOtp");
        
       } else if (res.data.message === "Invalid Email or Password") {
         toast.error("Invalid Email or Password");
@@ -51,7 +57,7 @@ useEffect(()=>{
 
 
 
-},[])
+},[timer])
 
 
   const [otp1, setOtp1] = useState("");
@@ -59,7 +65,7 @@ useEffect(()=>{
   const [otp3, setOtp3] = useState("");
   const [otp4, setOtp4] = useState("");
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const verfyOtp = async (e) => {
     try {
@@ -152,14 +158,6 @@ useEffect(()=>{
 
                     <div className="flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-gray-500">
                       <p>Didn't receive the code?</p>{" "}
-                      {/* <a
-                        className="flex flex-row items-center text-blue-600"
-                        href="http://"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                       
-                      </a> */}
                       <button onClick={resetPassword} disabled={timeotp>0}> Resend</button>
                      
                     </div>

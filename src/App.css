@@ -20,3 +20,22 @@
 .abc {
     transform: rotate(180deg);
   }
+
+.messagebox::-webkit-scrollbar{
+  display: none;
+}
+
+/* .usermessage{padding:10;
+  backgroundColor:'grey'; borderRadius:10px;maxWidth:"60%"} */
+  .usermessage {
+    padding: 10px;
+    max-width: 60%;
+    border-radius: 20px 20px 0px 20px;
+    background-color: rgb(151, 221, 151);
+  }
+  .sendermessage{
+    padding: 10px;
+    max-width: 60%;
+    border-radius: 20px 20px 20px 0px;
+    background-color: rgb(170, 151, 221);
+  }

@@ -92,9 +92,9 @@ const AdminNavBar = () => {
             >
               <div className="flex flex-col -mx-6 lg:flex-row lg:items-center lg:mx-8">
                 <NavLink
-                  to="/admin"
+                  to="/admin/dashboard"
                   className={
-                    location.pathname === "/admin"
+                    location.pathname === "/admin/dashboard"
                       ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors  duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
                       : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors  duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
                   }
@@ -145,8 +145,8 @@ const AdminNavBar = () => {
                   to="/admin/coupon"
                   className={
                     location.pathname === "/admin/coupon"
-                      ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "
-                      : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "
+                      ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110 "
+                      : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110 "
                   }
                 >
                   Coupon
@@ -154,41 +154,24 @@ const AdminNavBar = () => {
                 <NavLink
                   to="/admin/booking"
                   className={location.pathname==="/admin/booking" 
-                  ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "
-                  : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "}
+                  ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110 "
+                  : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110 "}
                 >
                   Booking
                 </NavLink>
-                <NavLink
-                  to="/admin/booking"
-                  className={location.pathname==="/admin/booking" 
-                  ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "
-                  : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-125 "}
-                >
-                  
-                </NavLink>
-                {adminData?
               <NavLink
+               to="/admin"
              onClick={handleLogout}
-              // className={
-              //   location.pathname === "/signin"
-              //     ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
-              //     : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
-              // }
+              className={
+                location.pathname === "/admin"
+                  ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+                  : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+              }
             >
               Sign Out
             </NavLink>
-            :
-            <NavLink
-            to="/admin/signin"
-            className={
-              location.pathname === "/admin/signin"
-                ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
-                : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
-            }
-          >
-            Sign In
-          </NavLink>}
+
+         
               </div>
 
               <div className="flex items-center mt-4 lg:mt-0">

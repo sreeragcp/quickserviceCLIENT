@@ -17,8 +17,8 @@ const UserBooking = () => {
   const [data, setData] = useState([]);
   const [isChatModalOpen, setIsChatModalOpen] = useState(true);
 
-  const user = useSelector((state) => state.tocken.userData);
-  const tocken = useSelector((state)=>state.tocken.tocken)
+  const user = useSelector((state) => state?.tocken?.userData);
+  const tocken = useSelector((state)=>state?.tocken?.tocken)
 
   const BookingDetails = async () => {
     try {
@@ -36,7 +36,7 @@ const UserBooking = () => {
 
   const bookingCancel = async (bookingId) => {
     try {
-      const res = await functionBookingCancel(bookingId,tocken);
+      const res = await functionBookingCancel(bookingId);
       setUpdateBooking(res.data);
     } catch (error) {
       console.log(error.message);
@@ -47,7 +47,6 @@ const UserBooking = () => {
     const modal = document.getElementById("my_modal_1");
     modal.showModal();
     const res = await functionFetchDetail(id,tocken);
-    console.log(res, "this is the res");
     setData([res.data]);
   };
 

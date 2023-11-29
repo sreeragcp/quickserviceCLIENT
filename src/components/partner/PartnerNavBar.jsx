@@ -14,7 +14,7 @@ const PartnerNavBar = () => {
 
   const dispatch = useDispatch()
   
-  const partnerData = useSelector((state)=>state.tocken.partnerData) 
+  const partnerData = useSelector((state)=>state?.tocken?.partnerData) 
 
   const handleLogout = async()=>{
     dispatch(logout());
@@ -94,9 +94,9 @@ const PartnerNavBar = () => {
             >
               <div className="flex flex-col -mx-6 lg:flex-row lg:items-center lg:mx-8">
                 <NavLink
-                  to="/partner"
+                  to="/partner/dashboard"
                   className={
-                    location.pathname === "/partner"
+                    location.pathname === "/partner/dashboard"
                       ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors  duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
                       : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors  duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
                   }
@@ -135,28 +135,19 @@ const PartnerNavBar = () => {
                   Profile
                 </NavLink>
 
-                {partnerData?
+       
               <NavLink
+              to="/partner"
              onClick={handleLogout}
-              // className={
-              //   location.pathname === "/signin"
-              //     ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
-              //     : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
-              // }
+              className={
+                location.pathname === "/partner"
+                  ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+                  : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
+              }
             >
               Sign Out
             </NavLink>
-            :
-            <NavLink
-            to="/partner/signin"
-            className={
-              location.pathname === "/partner/signin"
-                ? "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
-                : "px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:scale-110"
-            }
-          >
-            Sign In
-          </NavLink>}
+          
               </div>
 
               <div className="flex items-center mt-4 lg:mt-0">

@@ -8,7 +8,8 @@ import { useSelector } from "react-redux";
 
 const AdminPartnerList = () => {
 
-  const tocken = useSelector((state)=>state.tocken.tocken)
+  const tocken = useSelector((state)=>state?.tocken?.tocken)
+  console.log(tocken,"this is the tocken");
   const [partnersData, setPartnersData] = useState([]);
   const [verify, setVerify] = useState(false);
 
@@ -51,10 +52,8 @@ const AdminPartnerList = () => {
   }, []);
 
   const userVerify = async (partnerId) => {
-    console.log("inside the userVerify");
-    console.log(partnerId, "this is the partnerid");
     try {
-      const res = await verifyPartnerFunction({ partnerId });
+      const res = await verifyPartnerFunction({partnerId},tocken);
       if (res.data) {
         setVerify(true);
       }

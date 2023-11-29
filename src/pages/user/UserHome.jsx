@@ -38,7 +38,6 @@ const UserHome = () => {
   };
 
 
-
   const fetchVehicle = async () => {
     const headers = {
       'Authorization': `Bearer ${tocken}`,
@@ -113,7 +112,7 @@ const UserHome = () => {
           <div className="card-actions">
             {vehicleData.map((obj) => (
               <div key={obj._id} className="cursor-pointer hover:scale-110 duration-700">
-              <Link to={`/vehicleDetail/${obj._id}`}>
+              <Link to={ tocken?`/vehicleDetail/${obj._id}`:'/'}>
                   <div className="ml-28 mt-3 h-32 w-32 rounded-md border border-gray-600 ">
                     <img className="rounded-md"src={obj.Image}/>
                   </div>

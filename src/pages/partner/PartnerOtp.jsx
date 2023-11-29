@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 
 const PartnerOtp = () => {
@@ -29,7 +29,7 @@ const PartnerOtp = () => {
 
       if (res.data.message ==="success") {
         toast.success("Verification successful!");
-        navigate("/partner/signin");
+        navigate("/partner");
       } else if (res.data.message === "Entered mail is already registered") {
         toast.error("Entered email is already registered");
       } else {
@@ -40,8 +40,10 @@ const PartnerOtp = () => {
     }
   };
   return (
+    <>
+    <Toaster position="top-right" reverseOrder={false} />
     <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-cyan-100 py-12 bg-cover">
-      <ToastContainer />
+    
       <div className="relative bg-white px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
         <div className="mx-auto flex w-full max-w-md flex-col space-y-16">
           <div className="flex flex-col items-center justify-center text-center space-y-2">
@@ -127,6 +129,7 @@ const PartnerOtp = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

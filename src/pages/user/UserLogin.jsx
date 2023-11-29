@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
-import { useLoginMutation } from "../../slices/userApiSlice";
-import toast, { Toaster } from "react-hot-toast";
+// import toast, { Toaster } from "react-hot-toast";
+import { userLoginFuction } from "../../services/Apis.js";
+import {toast} from "react-toastify"
 import { setCredentials } from "../../slices/authSlice";
 import { forgetUserPasswordFunction } from "../../services/Apis.js";
 import { userSigninValidation } from "../../validations/UserValidation";
@@ -31,8 +32,6 @@ const UserLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [login, { isLoading }] = useLoginMutation();
-
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: userSigninValidation,
@@ -43,12 +42,13 @@ const UserLogin = () => {
           password: values.password,
         };
 
-        const res = await login(userDatas).unwrap();
-        const { tocken, userData } = res;
+        const res = await userLoginFuction(userDatas)
+        console.log(res,"this is the res");
+        const { tocken, userData } = res.data;
 
         dispatch(setCredentials({ tocken, userData }));
-        if (res.tocken) {
-          const user = JSON.stringify(res.userData._id);
+        if (res.data.tocken) {
+          const user = JSON.stringify(res?.data?.userData._id);
           localStorage.setItem("userId", user);
           navigate("/");
         } else if (res.data.message === "Invalid Email or Password") {
@@ -69,9 +69,10 @@ const UserLogin = () => {
           email: values.email,
         };
         const res = await forgetUserPasswordFunction(resetEmail);
-        if (res.data.message === "success") {
-          localStorage.setItem("timer", new Date());
 
+        if (res.data.message === "Your email is already registered") {
+          localStorage.setItem("forgotemail", JSON.stringify(resetEmail.email));
+          localStorage.setItem("timer", new Date());
           toast.success("success");
           navigate("/forgotOtp");
         } else if (res.data.message === "Invalid Email or Password") {
@@ -90,7 +91,6 @@ const UserLogin = () => {
   return (
     <>
       <UserNavBar />
-      <Toaster position="top-right" reverseOrder={false} />
       {forget ? (
         <div className="flex justify-center items-center h-full">
           <div className="card ml-5 mt-32 w-5/12 bg-base-100 shadow-xl image-full">
@@ -238,6 +238,7 @@ const UserLogin = () => {
 
               <div className="mt-6">
                 <button
+                  type="button"
                   className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50"
                   onClick={formik.handleSubmit}
                 >

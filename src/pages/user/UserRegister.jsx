@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { NavLink } from "react-router-dom";
-import { useRegisterMutation } from "../../slices/userApiSlice";
+import { userRegisterFuction } from "../../services/Apis.js";
 import * as yup from "yup";
 import { userSignupValidation } from "../../validations/UserValidation";
 import { useFormik} from "formik";
@@ -18,8 +18,6 @@ const initialValues = {
 const UserRegister = () => {
 
 
-  const [register, { isLoading }] = useRegisterMutation();
-
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: userSignupValidation,
@@ -34,9 +32,10 @@ const UserRegister = () => {
         };
 
         localStorage.setItem('userData', JSON.stringify(userData));
-        const res = await register(userData).unwrap()
-
-        if (res.message === 'success') {
+        const res = await userRegisterFuction(userData)
+        console.log(res);
+        if (res.data.message === 'success') {
+          localStorage.setItem("timer", new Date());
           navigate('/otp');
         } else if (res.message === 'Your email is already registered') {
           toast('Your email is already registered');

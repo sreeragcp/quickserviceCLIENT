@@ -1,12 +1,11 @@
 import React, { useState, useEffect,useRef } from 'react'
 import Chart from 'chart.js/auto';
-import PartnerNavBar from '../../components/partner/PartnerNavBar';
 import { functionPerdayEarnings } from '../../services/Apis.js';
 import { useSelector } from "react-redux";
 
 const ChartTwo = () => {
   
-  const tocken = useSelector((state)=>state.tocken.tocken)
+  const tocken = useSelector((state)=>state?.tocken?.tocken)
 
     const [bookingCount,setBookingCount]= useState([])
     const [bookingDate,setBookingDate]= useState([])
